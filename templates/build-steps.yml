@@ -1,0 +1,19 @@
+parameters:
+- name: configuration
+  type: string
+  default: Release
+
+steps:
+- task: PowerShell@2
+  displayName: Validate source
+  inputs:
+    filePath: scripts/test.ps1
+    pwsh: true
+- task: PowerShell@2
+  displayName: Create package
+  inputs:
+    filePath: scripts/build.ps1
+    arguments: >
+      -OutputPath "$(Build.ArtifactStagingDirectory)/package"
+      -Configuration "${{ parameters.configuration }}"
+    pwsh: true

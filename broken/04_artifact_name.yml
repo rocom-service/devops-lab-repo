@@ -1,0 +1,25 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Build
+  jobs:
+  - job: Package
+    steps:
+    - pwsh: |
+        New-Item -ItemType Directory -Path '$(Build.ArtifactStagingDirectory)/package' -Force
+        Set-Content -LiteralPath '$(Build.ArtifactStagingDirectory)/package/version.txt' -Value '1.0.0'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/package
+        artifact: orderflow-package
+
+- stage: Consume
+  dependsOn: Build
+  jobs:
+  - job: Download
+    steps:
+    - download: current
+      artifact: orderflow-app

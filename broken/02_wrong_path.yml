@@ -1,0 +1,12 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+- task: PowerShell@2
+  displayName: Validate source
+  inputs:
+    filePath: script/test.ps1
+    pwsh: true

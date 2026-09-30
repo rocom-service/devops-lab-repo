@@ -1,0 +1,45 @@
+name: $(Date:yyyyMMdd).$(Rev:r)
+
+trigger:
+  branches:
+    include:
+    - main
+    - feature/*
+  paths:
+    include:
+    - src/*
+    - scripts/*
+    - azure-pipelines.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: Release
+
+stages:
+- stage: Build
+  displayName: Test and package
+  jobs:
+  - job: VerifyAndPackage
+    displayName: Verify and package
+    steps:
+    - checkout: self
+    - task: PowerShell@2
+      displayName: Validate source
+      inputs:
+        filePath: scripts/test.ps1
+        pwsh: true
+    - task: PowerShell@2
+      displayName: Create package
+      inputs:
+        filePath: scripts/build.ps1
+        arguments: >
+          -OutputPath "$(Build.ArtifactStagingDirectory)/package"
+          -Configuration "$(buildConfiguration)"
+        pwsh: true
+    - task: PublishPipelineArtifact@1
+      displayName: Publish orderflow package
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/package
+        artifact: orderflow-package

@@ -1,0 +1,68 @@
+name: $(Date:yyyyMMdd).$(Rev:r)
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: Release
+
+stages:
+- stage: Build
+  jobs:
+  - job: VerifyAndPackage
+    steps:
+    - checkout: self
+    - task: PowerShell@2
+      displayName: Validate source
+      inputs:
+        filePath: scripts/test.ps1
+        pwsh: true
+    - task: PowerShell@2
+      displayName: Create package
+      inputs:
+        filePath: scripts/build.ps1
+        arguments: >
+          -OutputPath "$(Build.ArtifactStagingDirectory)/package"
+          -Configuration "$(buildConfiguration)"
+        pwsh: true
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/package
+        artifact: orderflow-package
+
+- stage: Deploy_Staging
+  displayName: Deploy to staging
+  dependsOn: Build
+  jobs:
+  - deployment: DeployStaging
+    environment: orderflow-staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: orderflow-package
+          - pwsh: |
+              Write-Host 'Deploying the promoted package to staging'
+              Get-ChildItem -Recurse '$(Pipeline.Workspace)/orderflow-package'
+            displayName: Simulate staging deployment
+
+- stage: Deploy_Production
+  displayName: Deploy to production
+  dependsOn: Deploy_Staging
+  condition: succeeded()
+  jobs:
+  - deployment: DeployProduction
+    environment: orderflow-prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: orderflow-package
+          - pwsh: |
+              Write-Host 'Deploying the same promoted package to production'
+              Get-Content '$(Pipeline.Workspace)/orderflow-package/version.txt'
+            displayName: Simulate production deployment

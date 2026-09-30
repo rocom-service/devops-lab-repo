@@ -1,0 +1,23 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: Release
+
+steps:
+- checkout: self
+- task: PowerShell@2
+  displayName: Create package
+  inputs:
+    filePath: scripts/build.ps1
+    arguments: >
+      -OutputPath "$(Build.ArtifactStagingDirectory)/package"
+      -Configuration "$(buildConfig)"
+    pwsh: true
+- pwsh: |
+    if ('$(buildConfig)' -eq '$(buildConfig)') {
+      throw 'Expected variable buildConfig was not expanded.'
+    }
+  displayName: Verify variable expansion
