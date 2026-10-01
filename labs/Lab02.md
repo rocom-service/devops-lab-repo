@@ -6,17 +6,23 @@
 
 ## Ziel und Vorbereitung
 
-Konfiguriert vier Rollen nach dem Least-Privilege-Prinzip und belegt erlaubte und verweigerte Aktionen. Alle Änderungen erfolgen im eigenen Trainingsprojekt. Nutzt vorbereitete Testidentitäten; ladet keine fremden Personen ein. Euer Administrationskonto bleibt für die Einrichtung verfügbar und dient nicht als Beweis für die Rechte einer eingeschränkten Persona.
+Für **alle Übungskonten in Lab02 wird ausschließlich Stakeholder verwendet**. Es wird kein Upgrade auf Basic verlangt. Konfiguriert vier Rollen nach dem Least-Privilege-Prinzip und prüft erlaubte und verweigerte Aktionen an Work Items. Alle Änderungen erfolgen im eigenen Trainingsprojekt in **ppedv-courses**.
+
+Für die Einrichtung benötigt ihr passende administrative Permissions. Fehlen sie, übernimmt der Trainer die betreffenden Einstellungen; auch administrative Aufgaben sind mit Stakeholder und passenden Berechtigungen möglich. Die eingeschränkten Testkonten erhalten keine Administratorrolle. Ladet keine fremden Personen ein und verändert keine bestehenden Lizenzzuweisungen außerhalb der für Lab02 vorgesehenen Konten.
+
+Stakeholder kann in privaten Projekten Work Items lesen und bearbeiten, soweit die Area-Permissions dies erlauben, hat aber keinen Zugriff auf Azure Repos. Deshalb entfallen praktische Git-Push- und PR-Tests in diesem Lab. Die Repository-Sollmatrix bleibt als Modell erhalten; ein fehlender Repo-Zugriff ist hier kein Nachweis eines bestimmten Git-Rechts. [Microsoft: Stakeholder-Zugriff](https://learn.microsoft.com/en-us/azure/devops/organizations/security/stakeholder-access?view=azure-devops).
 
 | Abschnitt | Zeit | Ergebnis |
 |---|---|---|
 | Gruppen und Access Levels | 15 Min | Vier Gruppen, dokumentierte Mitgliedschaften |
-| Projekt-, Repo- und Pipelinerechte | 25 Min | Rechte am passenden Scope |
+| Projekt-/Area-Rechte und Ressourcenmodelle | 25 Min | Praktische Boards-Rechte, Repo-Sollmatrix |
 | Wirkung prüfen und dokumentieren | 20 Min | Positive und negative Tests |
 
-Fehlen Testkonten, richtet die Gruppen ein und lasst den Trainer mit seinem vorbereiteten Konto testen. Kennzeichnet noch nicht ausgeführte Tests als offen. Bleibt in **ppedv-courses**.
+Fehlen Testkonten, richtet die Gruppen ein und lasst den Trainer mit vorbereiteten Stakeholder-Konten testen. Kennzeichnet noch nicht ausgeführte Tests als offen. Bleibt in **ppedv-courses**.
 
 ## 1. Vier Projektgruppen anlegen
+
+Die folgenden Rollen beschreiben das fachliche Zielmodell. Git-Aufgaben werden mit den Stakeholder-Konten nicht praktisch ausgeführt. Für den Berechtigungstest bekommt die Entwickler-Persona Schreibzugriff auf einen isolierten Work-Item-Bereich, QA dort nur Lesezugriff.
 
 1. Öffnet euer Projekt → **Project settings → Permissions → New group**.
 2. Erstellt nacheinander die folgenden Gruppen. Tragt den jeweiligen Zweck in **Description** ein.
@@ -34,21 +40,21 @@ Fehlen Testkonten, richtet die Gruppen ein und lasst den Trainer mit seinem vorb
 
 **Nachweis:** Gruppenliste, Mitglieder und übergeordnete Gruppen jeder Persona.
 
-## 2. Access Level getrennt von Permissions prüfen
+## 2. Stakeholder und Mitgliedschaften prüfen
 
-1. Öffnet auf Organisationsebene **Organization settings → Users** und sucht die Testkonten.
-2. Notiert den vorhandenen **Access level**. Für private Git-Repositories benötigen die Testkonten **Basic** oder einen passenden höherwertigen Zugriff. **Stakeholder** genügt hier nicht.
-3. Fehlt die passende Zuweisung oder die Berechtigung für diese Seite, lasst den Trainer den Zugang prüfen. Bucht selbst keine kostenpflichtigen Lizenzen.
-4. Erstellt folgende Tabelle. Tragt tatsächliche Werte ein.
+1. Öffnet **Organization settings → Users** und sucht die vorbereiteten Lab02-Konten. Falls ihr diese Seite nicht verwalten dürft, übernimmt der Trainer die Prüfung.
+2. Verwendet für diese Konten **Access level: Stakeholder**. Bei einem eigens bereitgestellten Konto mit abweichender Zuweisung setzt der zuständige Kursadministrator über **Change access level** den vereinbarten Stakeholder-Zugang. Bestehende Arbeitskonten werden nicht pauschal herabgestuft.
+3. Prüft zusätzlich Projektmitgliedschaft und alle direkten/verschachtelten Gruppen. Der Access Level ersetzt diese Permissions nicht.
+4. Dokumentiert folgende Werte:
 
-   | Persona/Testkonto | Access Level | Direkte Gruppen | Geerbte Gruppen | Erwartete Rolle |
+   | Persona/Testkonto | Access Level | Direkte Gruppen | Geerbte Gruppen | Praktischer Test in Lab02 |
    |---|---|---|---|---|
-   | Entwickler | | | | App-Code beitragen |
-   | QA | | | | Nur lesen |
-   | Release Manager | | | | Release prüfen/freigeben |
-   | Externer Reviewer | | | | Nur App-Repository prüfen |
+   | Entwickler | Stakeholder | | | Work Item lesen und ändern |
+   | QA | Stakeholder | | | Work Item lesen, Änderung verweigert |
+   | Release Manager | Stakeholder | | | Projektzugang; optionale Pipelineprüfung |
+   | Externer Reviewer | Stakeholder | | | Repo-Zugriff durch Access Level ausgeschlossen |
 
-Ein Access Level schaltet Funktionen frei. Eine Permission erlaubt eine Aktion an einer Ressource. **Basic** ist deshalb kein Schreibrecht.
+Die Einschränkung von Azure Repos bleibt auch bei einem Git-`Allow` bestehen. Es werden weder ein öffentliches Projekt noch zusätzliche Administratorrechte als Umgehung eingerichtet.
 
 ## 3. Minimale Projektrechte setzen
 
@@ -59,10 +65,27 @@ Ein Access Level schaltet Funktionen frei. Eine Permission erlaubt eine Aktion a
 
 **Nachweis:** Projektberechtigungen jeder Gruppe mit sichtbarem Gruppennamen.
 
-## 4. Repositoryrechte konfigurieren
+## 4. Isolierten Bereich für praktische Berechtigungstests einrichten
 
-1. Öffnet **Project settings → Repositories → orderflow-app → Security**. Achtet darauf, das einzelne Repository und nicht „All repositories“ zu bearbeiten.
-2. Sucht jede der vier Gruppen und setzt die Rechte entsprechend dieser Sollmatrix.
+1. Öffnet **Project settings → Project configuration → Areas**. Legt unter dem Projektknoten über **… → New child** `Lab02-Permissions` an, sofern dieser Übungsbereich noch nicht existiert.
+2. Öffnet ausschließlich bei diesem Area Path **… → Security**. Verändert nicht die Rechte des Projektwurzel-Pfads oder der produktbezogenen Areas aus Lab01.
+3. Setzt für die Testgruppen:
+
+   | Recht am Area Path `Lab02-Permissions` | OrderFlow Developers | OrderFlow QA |
+   |---|---|---|
+   | View work items in this node | Allow | Allow |
+   | Edit work items in this node | Allow | Deny |
+
+4. Das **Deny** ist hier eine bewusst begrenzte Übung: Work-Item-Bearbeitung kann bereits aus anderen Gruppen geerbt werden. Ein bloßes `Not set` würde dieses Allow nicht aufheben. Notiert die geerbten Rechte und den Grund für die Ausnahme.
+5. Prüft, dass die beiden verwendeten Stakeholder-Testkonten keine Administratoren sind und nicht gleichzeitig beiden Testgruppen angehören. Sonst ist der Vergleich nicht aussagekräftig.
+6. Öffnet die Rechte des jeweiligen Kontos an genau diesem Area Path und prüft Vererbung bzw. **Why?**, soweit angeboten. Erwartet für beide Lesen, für Entwickler Bearbeiten und für QA keine Bearbeitung.
+
+Die Sperre gilt ausschließlich im Übungsbereich. Andere fachliche QA-Aufgaben werden dadurch nicht pauschal eingeschränkt. Die Prüfung erfolgt direkt am Work Item; der neue Area Path muss keinem Team-Board zugewiesen werden. [Microsoft: Work-Tracking-Permissions](https://learn.microsoft.com/en-us/azure/devops/organizations/security/set-permissions-access-work-tracking?view=azure-devops).
+
+## 5. Repositoryrechte als Sollmodell auswerten
+
+1. Übertragt die folgende Matrix in euer Rollenmodell. Sie beschreibt Git-Rechte bei grundsätzlich verfügbarem Repos-Zugriff; Stakeholder erhält dadurch keinen Repo-Zugang.
+2. Falls der Trainer die Repository-Security im vorhandenen Projekt öffnen kann, gleicht das Modell dort ab. Eine Einstellung an dieser Oberfläche oder ein Basic-Konto ist keine Voraussetzung für die Lab02-Abnahme.
 
    **A = Allow. N = Not set ohne geerbtes Allow.** Prüft den effektiven Zustand zusätzlich; N ist kein ausdrückliches Deny.
 
@@ -76,15 +99,15 @@ Ein Access Level schaltet Funktionen frei. Eine Permission erlaubt eine Aktion a
    | Manage permissions / Edit policies | N | N | N | N |
    | Bypass policies when pushing / when completing pull requests | N | N | N | N |
 
-3. Öffnet **orderflow-infra → Security**. Der externe Reviewer und QA erhalten hier kein Read-Allow. Entwicklern und Release Managern gebt ihr nur dann Zugriff, wenn die konkrete Kursaufgabe ihn erfordert.
+3. Ergänzt `orderflow-infra` im Modell: Reviewer und QA erhalten kein vorgesehenes Read-Allow. Für Entwickler und Release Manager ist der konkrete Bedarf zu begründen.
 4. Falls eine Persona weiterhin ein geerbtes Allow besitzt, ermittelt seine Herkunft. Vermeidet pauschale Deny-Regeln. Ein gezieltes Deny kommt erst infrage, wenn eine notwendige Ausnahme von einem nicht entfernbaren Allow begründet ist.
-5. Prüft insbesondere den Reviewer: **Contribute to pull requests** erlaubt Review-Aktivitäten; **Contribute** für Commit-/Pushzugriff bleibt ohne Allow.
+5. Unterscheidet beim Reviewer **Contribute to pull requests** von **Contribute**. Diese Rechte sind fachlich verschieden; mit Stakeholder wird keines davon durch einen echten PR- oder Pushversuch nachgewiesen.
 
-**Nachweis:** Rechte aller vier Gruppen auf `orderflow-app` sowie Read-Recht des Reviewers auf `orderflow-infra`.
+**Ergebnis:** Erläuterte Sollmatrix und die Unterscheidung zwischen Access-Level-Grenze und Ressourcen-Permission.
 
-## 5. Pipelinerechte vorbereiten oder setzen
+## 6. Pipelinerechte vorbereiten oder optional prüfen
 
-Die Pipeline `orderflow-ci` entsteht in [Lab 04](Lab04.md). Existiert sie noch nicht, notiert die folgende Matrix als offene Konfiguration und holt sie direkt nach deren Erstellung nach.
+Existiert bereits eine vorbereitete `orderflow-ci`, könnt ihr ihre Portalrechte zusätzlich prüfen. Andernfalls genügt in Lab02 das folgende Modell; ein Pipeline-Run ist für die Pflichtabnahme nicht nötig. Pipelinezugriff und Repo-Zugriff sind getrennt: Stakeholder kann Azure Pipelines bei passenden Permissions nutzen. YAML-Bearbeitung im privaten Azure Repo bleibt ausgeschlossen.
 
 1. Öffnet **Pipelines → Pipelines → orderflow-ci → … → Manage security**; je nach Oberfläche heißt der Menüpunkt **Security**.
 2. Sucht die Gruppen und setzt die Rechte auf dieser Pipeline.
@@ -101,38 +124,43 @@ Die Pipeline `orderflow-ci` entsteht in [Lab 04](Lab04.md). Existiert sie noch n
 
 Environments und Approval-Rollen werden in Lab03/06 eingerichtet. Für die reine Freigaberolle sind dort **Reader** plus die Benennung als Approver vorgesehen. Eine echte Verwaltungsaufgabe benötigt gesonderte Ressourcenrechte und ist ausdrücklich zu dokumentieren.
 
-## 6. Effektive Rechte mit getrennten Testidentitäten prüfen
+## 7. Verhalten mit zwei Stakeholder-Konten testen
 
-1. Öffnet am Repository **Security**, sucht das konkrete Entwickler-Testkonto und prüft `Read`, `Contribute` und `Create branch` einschließlich Vererbung. Nutzt **Why?**, **Permissions** oder die angezeigte effektive Berechtigung, soweit verfügbar.
-2. Wiederholt das für QA oder den externen Reviewer. Prüft zusätzlich den verweigerten Infra-Zugriff.
-3. Meldet euch für Verhaltenstests mit dem jeweiligen Testkonto in einem separaten Browserprofil oder privaten Fenster an. Kontrolliert den sichtbaren Kontonamen. Eine Gruppenauswahl im Adminportal wechselt nicht die angemeldete Identität.
-4. **Positivtest Entwickler:** Unter **Repos → Files → orderflow-app** einen Branch `feature/lab02-<kuerzel>` aus `main` erstellen. Eine harmlose Datei `lab02-permission-test.md` mit dem Text `Berechtigungstest Lab 02` anlegen und auf diesen Branch committen. Notiert Commit und Branch. Alternativ führt einen echten Git-Push mit dem vorbereiteten Entwicklerkonto aus.
-5. **Negativtest QA:** Versucht mit QA dieselbe Datei auf dem Testbranch zu ändern und zu committen. Die Aktion muss fehlen oder verweigert werden. Kein Wechsel zum Administrationskonto als „Reparatur“.
-6. **Reviewtest:** Öffnet als Entwickler einen PR vom Testbranch nach `main`. Der vorbereitete Reviewer kann ihn lesen und einen sachlichen Testkommentar hinterlassen, aber keinen Code pushen.
-7. **Abgrenzungstest:** Öffnet als externer Reviewer `orderflow-infra`. Erwartet fehlenden Zugriff. Eine Repositoryliste allein ist kein vollständiger Beweis; prüft auch den direkten Repo-Link.
-8. Sobald die Pipeline existiert: QA öffnet einen Run und dessen Logs, versucht aber nicht erfolgreich die Pipeline zu bearbeiten.
-9. Der Test-PR muss für dieses Lab nicht zusammengeführt werden. Kennzeichnet ihn als Test und schließt ihn nach der Kursabnahme ohne Merge, wenn seine Datei nicht benötigt wird.
+1. Meldet euch mit dem Entwickler-Testkonto in einem separaten Browserprofil oder privaten Fenster an. Kontrolliert Konto und Access Level. Die Auswahl einer Gruppe im Adminportal wechselt nicht die angemeldete Identität.
+2. Öffnet **Boards → Work Items → New Work Item** und wählt **Task** oder den vom Trainer vorgegebenen Typ. Tragt den Titel `Lab02 – Berechtigungstest <kuerzel>` ein und setzt **Area Path** ausdrücklich auf `<projekt>\Lab02-Permissions`. Speichert. Falls dieser Erstellungsschritt im vorbereiteten Projekt nicht möglich ist, legt der Trainer das Testelement an; der anschließende Änderungstest bleibt erforderlich.
+3. **Positivtest Entwickler:** Ändert die Beschreibung des Testelements auf `Änderung durch Entwickler-Testkonto` und speichert. Prüft die gespeicherte Änderung bzw. den History-Eintrag und notiert ID/Link des Work Items.
+4. Öffnet denselben Work-Item-Link mit dem QA-Testkonto in einem getrennten Browserprofil. **Positivtest QA:** Das Element und die Beschreibung sind lesbar.
+5. **Negativtest QA:** Versucht, die Beschreibung zu ändern und zu speichern. Erwartet eine fehlende Bearbeitungsmöglichkeit oder eine Berechtigungsfehlermeldung. Notiert die tatsächliche Reaktion. Das Work Item muss unverändert bleiben.
+6. Vergleicht den Befund mit **Edit work items in this node** am Testbereich. Die Verweigerung folgt hier aus der Area-Permission, nicht aus Stakeholder, denn beide Konten haben denselben Access Level.
+7. **Access-Level-Abgrenzung:** Prüft mit dem Entwickler-Stakeholder den bekannten Link zu `orderflow-app`. Erwartet keinen Repo-Zugriff, unabhängig vom Git-Sollmodell. Bezeichnet dies nicht als erfolgreichen Negativtest für QA-Contribute oder Infra-Read.
+8. **Optional bei vorhandener Pipeline:** QA liest einen vorbereiteten Run und Logs, darf die Pipeline nach der Rollenmatrix aber nicht bearbeiten. Notiert den tatsächlichen Befund; fordert dafür kein Upgrade auf Basic an.
+9. Lasst den isolierten Testbereich bis zur Abnahme bestehen. Soll er später anderweitig genutzt werden, stellt der zuständige Administrator die zuvor notierten Rechte gezielt wieder her. Keine unvermerkten Deny-Regeln auf gemeinsam genutzten Areas hinterlassen.
 
-## 7. Abnahme
+## 8. Abnahme
 
-| Test | Identität | Erwartung | Tatsächliches Ergebnis | Beleg/Link |
+| Test | Identität / Access Level | Erwartung | Tatsächliches Ergebnis | Work-Item-/Run-Link oder Meldung |
 |---|---|---|---|---|
-| Feature-Branch/Commit | Entwickler | erlaubt | | |
-| Code committen | QA | verweigert | | |
-| PR kommentieren | Reviewer | erlaubt | | |
-| Infra-Repo lesen | Reviewer | verweigert | | |
-| Build/Logs ansehen | QA | erlaubt, sobald Pipeline vorhanden | | |
-| Pipeline bearbeiten | QA | verweigert | | |
+| Work Item ändern | Entwickler / Stakeholder | erlaubt | | |
+| Dasselbe Work Item lesen | QA / Stakeholder | erlaubt | | |
+| Dasselbe Work Item ändern | QA / Stakeholder | verweigert durch Area-Permission | | |
+| Privates App-Repo öffnen | Entwickler / Stakeholder | kein Zugriff durch Access Level | | |
+| Vorbereiteten Build lesen | QA / Stakeholder | optional, mit passenden Permissions | | |
+| Pipeline bearbeiten | QA / Stakeholder | optional, laut Rollenmatrix verweigert | | |
 
-- [ ] Gruppenrechte sind am passenden Scope gesetzt; breite Vererbung ist geprüft.
-- [ ] Die effektiven Rechte von zwei Personas wurden geprüft.
-- [ ] Mindestens ein positiver und ein negativer Verhaltenstest sind belegt.
-- [ ] Offene Pipeline-Tests sind für Lab04 vermerkt.
+- [ ] Alle für Lab02 verwendeten Übungskonten haben Stakeholder; kein Basic-Upgrade ist erforderlich.
+- [ ] Gruppen und Mitgliedschaftsketten sind dokumentiert.
+- [ ] Lesen/Bearbeiten am isolierten Area Path sind für zwei Konten effektiv geprüft.
+- [ ] Ein erfolgreicher Änderungstest und ein verweigerter Änderungstest sind am selben Work Item belegt.
+- [ ] Die gezielte Deny-Ausnahme und ihr begrenzter Scope können erklärt werden.
+- [ ] Git-Rechte sind als Sollmodell ausgewertet; ausgefallene Repos-/PR-Aktionen werden nicht als Permission-Nachweis ausgegeben.
 
-**Reflexion:** Was passiert bei Allow aus `Contributors` plus Deny? Warum genügt Stakeholder trotz Allow nicht? Wie ersetzt ihr ein Einzelrecht durch eine Gruppe ohne Zugriffsunterbrechung?
+**Reflexion:** Warum darf ein Stakeholder das Work Item bearbeiten, der andere nicht? Warum bringt ein Git-Allow dennoch keinen Repos-Zugang? Wie würdet ihr ein Einzelrecht durch eine Gruppe ersetzen?
 
 ## Portalhilfe
 
 - [Berechtigungsreferenz](https://learn.microsoft.com/en-us/azure/devops/organizations/security/permissions?view=azure-devops)
 - [Git-Standardberechtigungen](https://learn.microsoft.com/en-us/azure/devops/organizations/security/default-git-permissions?view=azure-devops)
 - [Zugriff auf Pull Requests](https://learn.microsoft.com/en-us/azure/devops/repos/git/about-pull-requests?view=azure-devops)
+
+- [Stakeholder-Funktionsumfang](https://learn.microsoft.com/en-us/azure/devops/organizations/security/stakeholder-access?view=azure-devops)
+- [Permissions für Work Items und Area Paths](https://learn.microsoft.com/en-us/azure/devops/organizations/security/set-permissions-access-work-tracking?view=azure-devops)
