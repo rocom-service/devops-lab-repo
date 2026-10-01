@@ -6,6 +6,15 @@ Dieses kleine Repository dient den Azure-DevOps-Labs für Projektkonfiguration u
 
 - [Lab 01 · Teil B – Projekt und Ressourcen im Portal einrichten](labs/Lab01-Teil-B.md): Schritt-für-Schritt-Anleitung für die Organisation **ppedv-courses**, einschließlich zweitem Produktteam und Screenshot-Checkliste.
 
+- [Lab 02 – Benutzer, Gruppen und Berechtigungen](labs/Lab02.md)
+- [Lab 03 – Ressourcen-Governance-Challenge](labs/Lab03.md)
+- [Lab 04 – Erste YAML-Pipeline](labs/Lab04.md)
+- [Lab 05 – Pipeline erweitern](labs/Lab05.md)
+- [Lab 06 – Multi-Stage, Environments und Approval](labs/Lab06.md)
+- [Lab 07 – Troubleshooting Challenge](labs/Lab07.md)
+
+Alle Anleitungen enthalten konkrete Schritte, Sollwerte, Prüfnachweise und eine Screenshot-Checkliste. Die Azure-DevOps-Übungen bleiben in **ppedv-courses**.
+
 ## Dateien
 
 - `src/version.txt` – zu prüfende Produktversion
