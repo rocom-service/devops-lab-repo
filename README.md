@@ -1,6 +1,10 @@
 # OrderFlow Lab Repository
 
-Dieses kleine Repository dient ausschließlich den Pipeline-Labs. Es benötigt keine zusätzliche Programmiersprache und läuft mit PowerShell Core auf `ubuntu-latest`.
+Dieses kleine Repository dient den Azure-DevOps-Labs für Projektkonfiguration und Pipelines. Es benötigt keine zusätzliche Programmiersprache und läuft mit PowerShell Core auf `ubuntu-latest`.
+
+## Lab-Anleitungen
+
+- [Lab 01 · Teil B – Projekt und Ressourcen im Portal einrichten](labs/Lab01-Teil-B.md): Schritt-für-Schritt-Anleitung für die Organisation **ppedv-courses**, einschließlich zweitem Produktteam und Screenshot-Checkliste.
 
 ## Dateien
 
@@ -17,4 +21,3 @@ Dieses kleine Repository dient ausschließlich den Pipeline-Labs. Es benötigt k
 ## Import
 
 Den Inhalt dieses Verzeichnisses als Wurzel des Azure-Repos `orderflow-app` importieren oder initial committen.
-
