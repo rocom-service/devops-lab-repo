@@ -12,7 +12,7 @@
 |---|---|---|
 | 1. OrderFlow umsetzen – Schritte 1 bis 6 | ca. 25 Minuten | Privates Projekt, Team, Areas, Sprints und zwei Repositories |
 | 2. Zweite Produktlinie – Schritt 7 | ca. 20 Minuten | Begründete Strukturentscheidung und zusätzliches Produktteam |
-| 3. Dokumentieren und prüfen – Schritte 8 bis 9 | ca. 15 Minuten | Ressourcenlandkarte, Screenshots und Abnahme |
+| 3. Prüfen und reflektieren – Schritt 8 | ca. 15 Minuten | Ergebnisprüfung, Abnahme und Reflexion |
 
 Bleibt während des gesamten Labs in **ppedv-courses**. Erstellt keine neue Organisation. Nutzt ausschließlich euer Trainingsprojekt. Existiert eine Ressource dort schon, prüft und ergänzt sie; legt kein Duplikat an. Fehlen Rechte, verwendet das vom Trainer vorbereitete Projekt und meldet die konkrete fehlende Berechtigung.
 
@@ -35,7 +35,7 @@ Die Portalbezeichnungen sind hier auf Englisch angegeben. Je nach Sprache findet
 4. Wählt **Create**. Öffnet danach **Project settings → Overview** und prüft Name, Sichtbarkeit und Prozess.
 5. Lasst Boards, Repos und Pipelines für die folgenden Übungen verfügbar.
 
-**Nachweis:** Screenshot der Projektübersicht mit Name, **Private** und Prozess. Notiert die Projekt-URL.
+**Prüfung:** Kontrolliert in der Projektübersicht Name, **Private** und Prozess. Notiert die Projekt-URL.
 
 ## 2. OrderFlow-Team einrichten
 
@@ -45,7 +45,7 @@ Die Portalbezeichnungen sind hier auf Englisch angegeben. Je nach Sprache findet
 4. Prüft unter **Members**, dass euer vorhandenes Kurskonto Mitglied ist. Fügt nur bereits für eure Gruppe vorgesehene Konten hinzu.
 5. Optional: Erstellt analog `Platform Enablement`, wenn ihr in Teil A ein eigenes Plattformteam vorgesehen habt.
 
-**Nachweis:** Teamliste sowie Teamdetails mit Namen und vorhandener Mitgliedschaft. Blendet persönliche Angaben vor einer Veröffentlichung der Screenshots aus.
+**Nachweis:** Teamliste sowie Teamdetails mit Namen und vorhandener Mitgliedschaft.
 
 ## 3. Area Paths anlegen und dem Team zuordnen
 
@@ -60,7 +60,7 @@ Die Portalbezeichnungen sind hier auf Englisch angegeben. Je nach Sprache findet
 
 **Sollzustand:** `OrderFlow Product → OrderFlow`; optional `Platform Enablement → Platform`. Für die hier flache Struktur werden keine Unter-Areas benötigt. Area Paths ordnen Work Items fachlich zu; sie vergeben keine Repositoryrechte.
 
-**Nachweis:** Screenshot des Area-Baums und je konfiguriertem Team der Areas mit erkennbarer Standardzuordnung.
+**Prüfung:** Kontrolliert den Area-Baum und je konfiguriertem Team die Areas mit ihrer Standardzuordnung.
 
 ## 4. Zwei Sprints konfigurieren
 
@@ -151,7 +151,7 @@ Zeigt dem Trainer das private Projekt, das OrderFlow-Team mit Area/Sprints und b
 
 **Neue Situation:** Contoso führt eine zweite Produktlinie ein. Sie verwendet dasselbe Prozessmodell und dieselben zentralen Plattformdienste wie OrderFlow. Für diese Übung heißt sie `NextFlow`.
 
-1. Notiert eure Entscheidung in zwei bis drei Sätzen: weiteres Team im bestehenden Projekt oder eigenes Projekt? Nennt mindestens ein fachliches und ein administratives Kriterium.
+1. Notiert eure Entscheidung in zwei bis drei Sätzen: weiteres Team im bestehenden Projekt oder eigenes Projekt?
 2. Prüft folgende Leitfragen: Braucht die Produktlinie getrennte Zugriffe, unabhängige Administration oder ein anderes Prozessmodell? Oder genügen getrennte Backlogs bei gemeinsamem Prozess und gemeinsamer Verwaltung?
 3. **Musterentscheidung für die angegebenen Rahmenbedingungen:** ein weiteres Team und ein eigener Area Path im vorhandenen privaten Projekt. Führt dafür die folgenden Schritte aus:
    - Öffnet **Project settings → Teams → New team** und erstellt `NextFlow Product`.
@@ -167,43 +167,7 @@ Für diese Erweiterung sind keine weiteren Repositories und keine Cloudressource
 
 **Nachweis:** Entscheidungsbegründung, Teamliste sowie Area- und Sprintkonfiguration des zweiten Teams. Bei zwei Projekten zusätzlich dessen Projektübersicht.
 
-## 8. Ressourcenlandkarte und Screenshots erstellen
-
-Ergänzt eure Skizze aus Teil A um die **tatsächlich angelegten Namen**. Verbindet Organisation, Projekt(e), Teams, Areas, Sprints und Repositories. Markiert die Grenze, die ihr für NextFlow gewählt habt.
-
-Tragt folgende Einstellungsorte mit ihrem Zweck ein. Öffnet die erreichbaren Seiten und erstellt je einen Screenshot. Haltet lediglich fest, wo die Einstellungen liegen; die eigentliche Konfiguration der späteren Labs erfolgt dort.
-
-| Thema | Portalpfad | Eintrag in eurer Landkarte |
-|---|---|---|
-| Benutzer und Access Level | **Organization settings → Users** | Organisationszugang und Lizenz-/Zugriffsstufe; Identität, MFA und Kontolebenszyklus liegen in Microsoft Entra ID |
-| Projektgruppen | **Project settings → Permissions** | Projektgruppen und deren Berechtigungen |
-| Repositoryrechte | **Project settings → Repositories → orderflow-app → Security** | Berechtigungen am konkreten Repository |
-| Branch Policies | **Repos → Branches → main → … → Branch policies** | Qualitätsregeln für Änderungen am Branch |
-| Environment-Zugriff | **Pipelines → Environments → <Environment> → Security** | Benutzer-/Gruppenrollen am Environment |
-| Pipeline-Autorisierung | **Pipelines → Environments → <Environment> → Pipeline permissions** | Welche Pipelines die Ressource verwenden dürfen |
-
-Environment-Konfiguration folgt in Lab 03/06. Gibt es noch kein Environment, fotografiert die Übersicht und markiert die beiden letzten Pfade in der Landkarte als **geplant**. Legt für den Screenshot kein Environment an. Ist eine Einstellungsseite wegen fehlender Rechte nicht sichtbar, dokumentiert genau dies; erweitert dafür keine Administratorrollen.
-
-Speichert die Nachweise in einem lokalen Ordner `Lab01-Teil-B-Screenshots` mit folgenden Namen. Nehmt lange Einstellungsseiten bei Bedarf in mehreren Bildern auf und achtet darauf, dass Werte und Projekt-/Teamkontext lesbar sind.
-
-| Datei bzw. Präfix | Inhalt |
-|---|---|
-| `01-Projekt` | Name, Organisation, Private, Prozess |
-| `02-Teams` | Teamliste und Mitgliederkonfiguration |
-| `03-Areas-Projekt` | Area-Baum |
-| `04-Areas-OrderFlow` | Teamzuordnung und Default Area |
-| `05-Iterationen-Projekt` | Beide Sprints mit Daten |
-| `06-Iterationen-OrderFlow` | Backlog-, Default- und ausgewählte Iterationen |
-| `07-App-Dateien` | Repository-Wurzel auf main |
-| `08-App-Default-Branch` | main als Standard |
-| `09-Infra-README` | Repository, main und Zweck |
-| `10-NextFlow` | Zweites Team, Area, Iterationen; ggf. weiteres Projekt |
-| `11-Ressourcen-Einstellungen` | Je erreichbarem Einstellungsort aus der Tabelle ein Bild |
-| `12-Ressourcenlandkarte` | Endstand mit Strukturentscheidung |
-
-Ergänzt bei einem Plattformteam dessen Area- und Iterationsnachweise. Speichert Personenlisten und Screenshots im Kurskontext; veröffentlicht keine Kontodetails oder Zugangsdaten im öffentlichen GitHub-Repository.
-
-## 9. Ergebnisprüfung und Reflexion
+## 8. Ergebnisprüfung und Reflexion
 
 - [ ] Alle Azure-DevOps-Ressourcen liegen in **ppedv-courses**.
 - [ ] Das Trainingsprojekt ist privat und verwendet Git sowie den vereinbarten Prozess.
@@ -212,7 +176,7 @@ Ergänzt bei einem Plattformteam dessen Area- und Iterationsnachweise. Speichert
 - [ ] `orderflow-infra` enthält eine gespeicherte README mit seinem Zweck.
 - [ ] Die zweite Produktlinie wurde erst nach dem OrderFlow-Grundaufbau ergänzt.
 - [ ] `NextFlow Product` hat seine eigene Area und Sprintzuordnung; die Projektwahl ist begründet.
-- [ ] Ressourcenlandkarte und Screenshots belegen die Einstellungen; fehlende Rechte und geplante Ressourcen sind gekennzeichnet.
+- [ ] Die Einstellungen sind geprüft; fehlende Rechte und noch offene Schritte sind gekennzeichnet.
 
 Beantwortet abschließend:
 

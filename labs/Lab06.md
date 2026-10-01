@@ -152,22 +152,7 @@ Bei einer Approver-Gruppe reicht normalerweise eine Freigabe durch ein berechtig
 2. Reproduziert den negativen Fall wie in [Lab07, Fall F](Lab07.md#fall-f--environment-autorisierung): Entfernt ausschließlich in eurer Trainingsumgebung gezielt die Pipeline-Zuordnung, startet einen Test und belegt die verweigerte Ressourcennutzung.
 3. Stellt unmittelbar danach ausschließlich **orderflow-release** wieder her. Lasst die Produktions-Checks bestehen. Ein anschließend wartendes Approval ist das erwartete Verhalten.
 
-## 8. Screenshots und Abnahme
-
-Speichert unter `Lab06-Screenshots`.
-
-| Präfix | Inhalt |
-|---|---|
-| `01-YAML` | Stages, dependsOn, Deployment Jobs und current-Downloads |
-| `02-Pipeline` | orderflow-release mit Dateipfad; CI-Policy bleibt orderflow-ci |
-| `03-Environment-Security` | Rollen/Vererbung und Pipeline permissions beider Environments |
-| `04-Ohne-Approval` | Check-Zustand und vollständig erfolgreicher erster Run |
-| `05-Artefakt` | Run-ID, Name, Version und Metadaten |
-| `06-Approval-Settings` | Approver, Anleitung, Selbstfreigabe und Timeout |
-| `07-Wartende-Produktion` | Erfolgreiches Staging, Produktion vor Freigabe |
-| `08-Entscheidung` | Approve/Reject mit tatsächlichem Folgestatus |
-| `09-Deployment-History` | Beide Environments mit Run-Bezug |
-| `10-Autorisierungstest` | Gezielter Fehler und wiederhergestellter Endzustand |
+## 8. Abnahme
 
 - [ ] Beide Deployment Jobs referenzieren das richtige Environment.
 - [ ] Staging und Produktion verwenden das Paket desselben Runs.

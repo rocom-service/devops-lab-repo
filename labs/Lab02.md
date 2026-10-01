@@ -113,20 +113,7 @@ Environments und Approval-Rollen werden in Lab03/06 eingerichtet. Für die reine
 8. Sobald die Pipeline existiert: QA öffnet einen Run und dessen Logs, versucht aber nicht erfolgreich die Pipeline zu bearbeiten.
 9. Der Test-PR muss für dieses Lab nicht zusammengeführt werden. Kennzeichnet ihn als Test und schließt ihn nach der Kursabnahme ohne Merge, wenn seine Datei nicht benötigt wird.
 
-## 7. Screenshots und Abnahme
-
-Speichert unter `Lab02-Screenshots`. Nehmt für jede Gruppe bzw. Ressource bei Bedarf mehrere Bilder auf. Zeigt jeweils Kontext und Werte; veröffentlicht keine persönlichen Kontodetails im öffentlichen Kurs-Repo.
-
-| Präfix | Inhalt |
-|---|---|
-| `01-Gruppen` | Vier Gruppen und ihre Mitglieder/Mitgliedschaftsketten |
-| `02-Access-Level` | Tatsächliche Zugriffsstufen oder dokumentierter Trainer-Nachweis |
-| `03-Projektrechte` | View project-level information und Verwaltungsrechte |
-| `04-App-Rechte` | Rechte jeder Gruppe am App-Repo |
-| `05-Infra-Abgrenzung` | Effektives Read des Reviewers und Verhaltenstest |
-| `06-Pipeline-Rechte` | Rechte der konkreten Pipeline; sonst als offen markieren |
-| `07-Effective-Permissions` | Entwickler und QA/Reviewer, jeweils mit Scope |
-| `08-Verhaltenstests` | Erfolgreicher Commit, verweigerter Commit und Review |
+## 7. Abnahme
 
 | Test | Identität | Erwartung | Tatsächliches Ergebnis | Beleg/Link |
 |---|---|---|---|---|
@@ -138,7 +125,7 @@ Speichert unter `Lab02-Screenshots`. Nehmt für jede Gruppe bzw. Ressource bei B
 | Pipeline bearbeiten | QA | verweigert | | |
 
 - [ ] Gruppenrechte sind am passenden Scope gesetzt; breite Vererbung ist geprüft.
-- [ ] Zwei Personas wurden effektiv geprüft, nicht nur die Gruppenmatrix fotografiert.
+- [ ] Die effektiven Rechte von zwei Personas wurden geprüft.
 - [ ] Mindestens ein positiver und ein negativer Verhaltenstest sind belegt.
 - [ ] Offene Pipeline-Tests sind für Lab04 vermerkt.
 

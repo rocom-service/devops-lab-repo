@@ -94,20 +94,7 @@ Zeigt jedes Element im Editor und seinen sichtbaren Effekt im Log. `trigger: non
 3. Speichert und notiert: Dieser erste Build prüft bisher nur den technischen Start. Die fachliche Test- und Paketprüfung folgt in Lab05.
 4. Lasst die Pipeline-Verantwortlichen die offene Rechtekonfiguration aus Lab02 mit den Testkonten prüfen.
 
-## 6. Screenshots und Ergebnisprüfung
-
-Speichert unter `Lab04-Screenshots`.
-
-| Präfix | Inhalt |
-|---|---|
-| `01-YAML-main` | Vollständiger Startstand, Branch und Commit |
-| `02-Pipeline-Zuordnung` | Repository, YAML-Pfad und Pipeline-Name |
-| `03-Pipeline-Rechte` | Gruppenrechte auf orderflow-ci |
-| `04-Run-Start` | Manueller Run, Branch und Build-ID |
-| `05-Agent` | Initialize job mit tatsächlicher Image-Version |
-| `06-Checkout` | Repo und ausgecheckter Commit |
-| `07-PowerShell` | Begrüßung, Build-ID und Agent.OS |
-| `08-Ergebnis-Policy` | Grüner Run sowie Required/Automatic-Build-Validation |
+## 6. Ergebnisprüfung
 
 - [ ] Die Pipeline lädt die richtige Datei aus `orderflow-app`.
 - [ ] Der Run ist erfolgreich; eventuelle Kapazitätsprobleme sind ausdrücklich offen dokumentiert.

@@ -174,21 +174,7 @@ stages:
 
 Azure Repos Git startet PR-Validierung durch die Branch Policy. Ergänzt dafür keinen YAML-`pr:`-Trigger.
 
-## 7. Screenshots und Abnahme
-
-Speichert unter `Lab05-Screenshots`.
-
-| Präfix | Inhalt |
-|---|---|
-| `01-Trigger` | Branch-/Pfadfilter und aktiver Dateipfad |
-| `02-Variable` | buildConfiguration und Logausgabe |
-| `03-Test` | PowerShell-Testtask und erfolgreicher Logbeleg |
-| `04-Build` | Skriptaufruf, Argumente und Ausgabepfad |
-| `05-Artefakt` | Name und alle drei Dateien samt Konfigurationswert |
-| `06-Negativtest` | Ungültiger Commit, Fehlermeldung und übersprungene Folgeschritte |
-| `07-Reparatur` | Neuer gültiger Commit und grüner Run |
-| `08-PR-Validation` | Required/Automatic-Policy und Build im PR |
-| `09-Pfadfilter-Test` | Dokumentationscommit ohne CI und Quelländerung mit CI |
+## 7. Abnahme
 
 | Test | Erwartung | Tatsächliches Ergebnis | Commit/Run/Beleg |
 |---|---|---|---|

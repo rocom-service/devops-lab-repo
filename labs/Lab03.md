@@ -87,20 +87,7 @@ Verwendet das eingeschränkte Entwicklerkonto aus Lab02, nicht euer Administrati
 5. Führt die beiden Ressourcenautorisierungstests aus, sobald ein Deployment Job vorliegt: Die nicht autorisierte Testpipeline muss am Environment scheitern oder auf Autorisierung warten; die autorisierte Release-Pipeline darf die Ressource nach erfüllten Checks verwenden. Erteilt der negativen Testpipeline nicht versehentlich Zugriff über **Permit**.
 6. Fehlen heute Deployment Jobs, dokumentiert Schritt 5 als offen und führt ihn in Lab06/07 aus. Mindestens drei Prüfungen sollen schließlich belegt sein; die PR-Tests können schon jetzt abgeschlossen werden.
 
-## 7. Screenshots und Entscheidungsprotokoll
-
-Speichert unter `Lab03-Screenshots`, jeweils mit Projekt-, Branch- oder Ressourcenkontext.
-
-| Präfix | Inhalt |
-|---|---|
-| `01-Reviewer-Policy` | Alle Optionen und Reviewerzahl |
-| `02-Kommentare-Build-Validation` | Required-Regeln bzw. offener Build-Validation-Punkt |
-| `03-Branch-Security` | Effektive Bypass-Rechte des Entwicklerkontos |
-| `04-Pipeline-Security` | Konkrete Pipeline und Rollen, sobald vorhanden |
-| `05-Environments` | Namen und leere Trainingsressourcen |
-| `06-Environment-Security` | Benutzerrollen, Vererbung und Pipeline permissions je Environment |
-| `07-Service-Connection` | Trainingsverbindung oder dokumentiertes Rollenmodell |
-| `08-Angriffstests` | Abgelehnter Direktcommit, blockierter PR, später Autorisierungsfehler und Erfolg |
+## 7. Entscheidungsprotokoll
 
 Ergänzt für jede Ressource einen Satz: **Schutzobjekt – Identität/Gruppe – erlaubte Aktion – ausgeschlossene Aktion – Prüfnachweis**.
 

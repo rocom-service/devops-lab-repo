@@ -174,18 +174,7 @@ condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main
 Benutzerrolle des handelnden Administrators, Pipeline-Autorisierung und menschlicher Approval sind getrennt. Nur die entfernte Pipeline-Zuordnung wiederherstellen. Keine neue Ressource mit ähnlichem Namen und keine zusätzlichen Projektadministratorrechte anlegen.
 </details>
 
-## 4. Screenshots und Abnahme
-
-Speichert unter `Lab07-Screenshots`, je Fall mit passendem Präfix, beispielsweise `B-01-Fehlerstand`.
-
-| Präfix je Fall | Inhalt |
-|---|---|
-| `01-Konfiguration` | Datei/Branch/Commit bzw. Environment-Permission vor dem Test |
-| `02-Fehler` | Erste aussagekräftige Meldung, Stage/Step oder Validierungsdialog |
-| `03-Ursachenvergleich` | Falscher Pfad/Name/Condition im Vergleich zum tatsächlichen Zustand |
-| `04-Minimalfix` | Commit-Diff oder gezielt wiederhergestellte Autorisierung |
-| `05-Wiederholung` | Neuer Run mit korrektem Branch/Commit und tatsächlichem Status |
-| `06-Endzustand` | Artefakt, Metadaten, beabsichtigtes Warten/Überspringen oder restaurierte Permission |
+## 4. Abnahme
 
 - [ ] Mindestens zwei Fälle wurden vor der Änderung reproduziert.
 - [ ] Diagnoseprotokolle enthalten Phase, Meldung, Hypothese und Minimalfix.
