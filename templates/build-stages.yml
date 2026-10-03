@@ -1,0 +1,27 @@
+# Stage Template: Wiederverwendbarer Build-Abschnitt mit einem Job Template.
+parameters:
+- name: stageName
+  type: string
+  default: Build
+- name: configuration
+  type: string
+  default: Release
+  values:
+  - Debug
+  - Release
+- name: vmImage
+  type: string
+  default: ubuntu-latest
+- name: artifactName
+  type: string
+  default: orderflow-package
+
+stages:
+- stage: ${{ parameters.stageName }}
+  displayName: Test and package
+  jobs:
+  - template: build-jobs.yml
+    parameters:
+      configuration: ${{ parameters.configuration }}
+      vmImage: ${{ parameters.vmImage }}
+      artifactName: ${{ parameters.artifactName }}

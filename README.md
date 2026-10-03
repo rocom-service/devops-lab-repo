@@ -24,7 +24,7 @@ Alle Anleitungen enthalten konkrete Schritte, Sollwerte und Prüfnachweise. Die 
 - `azure-pipelines.start.yml` – Startpunkt für Lab 04
 - `azure-pipelines.solution.yml` – Referenz für Lab 05
 - `azure-pipelines.multistage.yml` – Referenz für Lab 06
-- `templates/build-steps.yml` – Bonuslösung für Wiederverwendung
+- `templates/` – Step-, Job-, Stage- und Extends-Templates mit [YAML-Beispielen zur Einbindung](templates/README.md)
 - `broken/` – absichtlich fehlerhafte Fälle für Lab 07
 
 ## Import

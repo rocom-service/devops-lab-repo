@@ -1,0 +1,33 @@
+# Job Template: Agent Pool, Checkout, Build-Schritte und Artefaktveröffentlichung.
+parameters:
+- name: jobName
+  type: string
+  default: VerifyAndPackage
+- name: configuration
+  type: string
+  default: Release
+  values:
+  - Debug
+  - Release
+- name: vmImage
+  type: string
+  default: ubuntu-latest
+- name: artifactName
+  type: string
+  default: orderflow-package
+
+jobs:
+- job: ${{ parameters.jobName }}
+  displayName: Verify and package
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
+  - checkout: self
+  - template: build-steps.yml
+    parameters:
+      configuration: ${{ parameters.configuration }}
+  - task: PublishPipelineArtifact@1
+    displayName: Publish orderflow package
+    inputs:
+      targetPath: $(Build.ArtifactStagingDirectory)/package
+      artifact: ${{ parameters.artifactName }}

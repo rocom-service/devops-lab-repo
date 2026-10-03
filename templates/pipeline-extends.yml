@@ -1,0 +1,17 @@
+# Extends Template: Gibt die Pipeline-Struktur und den Agent Pool vor.
+# Der Aufrufer kann nur die Build-Konfiguration aus der Werteliste wählen.
+parameters:
+- name: configuration
+  type: string
+  default: Release
+  values:
+  - Debug
+  - Release
+
+stages:
+- template: build-stages.yml
+  parameters:
+    stageName: Build
+    configuration: ${{ parameters.configuration }}
+    vmImage: ubuntu-latest
+    artifactName: orderflow-package
