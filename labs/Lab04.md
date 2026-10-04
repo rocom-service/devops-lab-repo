@@ -1,8 +1,12 @@
 # Lab 04 – Erste YAML-Pipeline
 
+> Synchronisierte Kopie der [maßgeblichen Lab-Anweisung](../../labs/04_Erste_YAML_Pipeline.md). Diese Anleitung verwendet die Voraussetzungen und Vorlagen aus dem vollständigen Kurspaket `devops-2/`. Nach einem Import des Repositories öffnest du diese Begleitdateien im separat bereitgestellten Kurspaket; die relativen Verweise darauf sind für dessen lokale Ordnerstruktur ausgelegt.
+
+**Start:** Beginne dieses Lab erst, wenn der Trainer dazu auffordert.
+
 **Dauer:** 30 Minuten · **Arbeitsform:** Einzelarbeit  
 **Organisation:** [ppedv-courses](https://dev.azure.com/ppedv-courses)  
-**Voraussetzung:** `orderflow-app` mit den importierten Lab-Dateien; vorbereiteter Agentzugang und die Branch Policies aus [Lab 03](Lab03.md).
+**Akteur:** du mit deinem persönlichen Basic-Kurskonto und Project-Administrator-Rechten im Teilnehmerprojekt aus [Kursvoraussetzungen und Teilnehmerzuordnung](../../VORAUSSETZUNGEN.md). **Voraussetzung:** Lab01–03 abgeschlossen; `orderflow-app/main` enthält die 14 Originaldateien. Reviewer-/Kommentar-Policies sind aktiv. Die Build Validation wird erst am Ende dieses Labs eingerichtet. Pool: **Azure Pipelines**, Image **ubuntu-latest**.
 
 ## Ziel und Ablauf
 
@@ -44,10 +48,10 @@ Legt eine Pipeline aus einer vorhandenen YAML-Datei an, führt sie manuell aus u
    ```
 
 5. Committet mit `lab04: add initial pipeline` auf dem Feature-Branch. Bei einer bereits vorhandenen aktiven Datei prüft erst ihren Stand, statt sie ungeprüft zu überschreiben.
-6. Erstellt einen PR nach `main`, lasst ihn gemäß den vorhandenen Policies unabhängig prüfen und führt ihn nach erfüllten Regeln zusammen. Falls eine vorbereitete Build-Validation den erstmaligen Aufbau blockiert, klärt mit dem Trainer die initiale Pipeline-Zuordnung; umgeht die Policies nicht eigenmächtig.
+6. Erstellt einen PR nach `main`, prüft ihn und genehmigt ihn in der Labumgebung selbst mit **Approve**. Führt ihn erst nach erfüllten Pflichtprüfungen und aufgelösten Kommentaren regulär zusammen. Die Trainingsregel aus Lab03 gilt: mindestens 1 Zustimmung, eigene Zustimmung Ein, Ausschluss des letzten Pushers Aus. Im Echtbetrieb ist unabhängiges Vier-Augen-Review erforderlich. Im Erstablauf gibt es gemäß Lab03 noch keine Build Validation; der erste PR wird durch Reviewer- und Kommentar-Policy geprüft. Bei Wiederholung mit bereits vorhandener Build Validation muss auch deren Run erfolgreich sein. Schalte sie nicht aus.
 7. Kontrolliert danach die Datei unter **Repos → Files → main**. Die nächsten Labs erweitern genau diesen Pfad.
 
-**Nachweis:** Gespeicherte YAML-Datei auf `main`, Commit-/PR-Link. Optional kann die vorhandene Startdatei direkt im Pipeline-Assistenten ausgewählt werden; vor Lab05 muss der aktive Pfad dann auf `azure-pipelines.yml` umgestellt werden.
+**Nachweis:** Gespeicherte YAML-Datei auf `main`, Commit-/PR-Link.
 
 ## 2. Pipeline aus Azure Repos Git erstellen
 
@@ -57,17 +61,17 @@ Legt eine Pipeline aus einer vorhandenen YAML-Datei an, führt sie manuell aus u
 4. Setzt **Branch: main** und **Path: /azure-pipelines.yml**. Wählt **Continue**.
 5. Kontrolliert den angezeigten YAML-Inhalt. Wählt am Run-Button den Dropdown-Eintrag **Save**, sofern angeboten. Wenn nur **Run** angeboten wird, erstellt und startet dieser die Pipeline direkt.
 6. Öffnet anschließend die Pipeline → **… → Rename/move** und nennt sie `orderflow-ci`.
-7. Prüft unter **… → Settings** den YAML-Dateipfad. Für einen neuen manuellen Run muss `main` ausgewählt sein; dokumentiert einen gegebenenfalls abweichenden Standardbranch.
-8. Holt die Rechte aus Lab02 nach: **… → Manage security** → Entwickler dürfen Queue/View builds, QA darf lesen, nur benannte Pipeline-Verantwortliche dürfen die Definition und Berechtigungen verwalten.
+7. Prüft unter **… → Settings** den YAML-Dateipfad `/azure-pipelines.yml` und setzt **Default branch for manual and scheduled builds** auf `refs/heads/main` bzw. den angebotenen Eintrag `main`. Speichert und öffnet die Einstellung zur Kontrolle erneut.
+8. Öffne **… → Manage security** und wähle nacheinander die Gruppen aus Lab02. Setze für **OrderFlow Developers** und **OrderFlow Release Managers** `View builds`, `View build pipeline` und `Queue builds` auf Allow. Für **OrderFlow QA** setze nur die beiden View-Rechte auf Allow; Queue bleibt Not set. Für **OrderFlow External Reviewers** bleiben alle diese Rechte Not set. `Edit build pipeline` und `Administer build permissions` bleiben für alle vier Fachgruppen Not set; prüfe zusätzliche Vererbung. Dein eigenes Project-Administrator-Konto verwaltet Definition und Rechte. Die Gruppen bleiben leer; du führst keinen Rollen-Login durch.
 
 **Nachweis:** Ausgewähltes Repository, Branch, Dateipfad, Pipelinename und konkrete Pipeline-Rechte.
 
-## 3. Manuell starten und Agent prüfen
+## 3. Ersten Run verwenden und Agent prüfen
 
-1. Öffnet **orderflow-ci → Run pipeline**.
-2. Wählt `main`, lasst die sonstigen Werte unverändert und wählt **Run**.
-3. Falls eine Ressourcenautorisierung angefordert wird, lest zuerst den konkreten Ressourcen- und Pipelinenamen. Autorisiert nur eine bekannte, für dieses Lab benötigte Ressource und nur diese Pipeline. Die Startpipeline benötigt weder Environment noch Service Connection.
-4. Öffnet den Run und seinen Job. Falls er wartet, unterscheidet **Warteschlange**, **fehlende Paralleljob-Kapazität** und **fehlende Autorisierung**. Bei fehlendem Microsoft-hosted-Kontingent verwendet ausschließlich den vom Trainer vorbereiteten Pool; dokumentiert die dadurch geänderte `pool:`-Konfiguration. Ein wartender Run ist noch kein grüner Lauf.
+1. Öffnet **orderflow-ci → Runs**. Hat der Erstellungsassistent bereits einen Run für `main` und den vorgesehenen Commit aus `/azure-pipelines.yml` gestartet, verwendet genau diesen Run. Auch ein noch wartender passender Run wird weiterverwendet.
+2. Nur wenn kein passender Run vorhanden ist, öffnet **Run pipeline**, wählt `main`, lasst die sonstigen Werte unverändert und wählt **Run**. Ein neuer Lauf nach einer notwendigen Fehlerkorrektur ist zulässig; ein zusätzlicher Start allein zur Wiederholung desselben Nachweises entfällt.
+3. Fordert der Run tatsächlich eine Repository-Erlaubnis an, öffne **View → Permit** ausschließlich für **orderflow-ci** auf **orderflow-app** deines Projekts. Prüfe die Namen im Dialog. Für den eingebauten Pool **Azure Pipelines** ist keine einzelne Pipeline-Freigabe einzurichten; dessen Pipeline permissions sind laut [Microsoft-Dokumentation](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/pools-queues?view=azure-devops) nicht konfigurierbar. Bei einer tatsächlichen Agent-Zugriffssperre prüft Wolfgang die Benutzer-/Gruppenrollen unter **Project settings → Agent pools → Azure Pipelines → Security** gemäß den [Voraussetzungen](../../VORAUSSETZUNGEN.md). Ein anderes Repository, Environment oder eine Service Connection wird von dieser Startpipeline nicht benötigt.
+4. Öffne den Run und seinen Job. Die Organisation teilt **einen Microsoft-hosted Paralleljob** zwischen den Teilnehmern. Bei **Waiting for an agent** lasse den Run in der Warteschlange und beobachte den Status; starte keine Duplikate. Eine Meldung **Permission needed** wird nach Schritt 3 behandelt. Bei einer ausdrücklichen Kontingentsperre prüft Wolfgang **Organization settings → Pipelines → Parallel jobs** und stellt die Kurskapazität im Pool Azure Pipelines wieder her; die YAML-Auswahl bleibt `ubuntu-latest`. Ein wartender Run ist noch kein erfolgreicher Lauf.
 5. Öffnet **Initialize job** und notiert das tatsächlich verwendete Image bzw. dessen Version. `ubuntu-latest` ist ein beweglicher Alias; die genaue Version kommt aus dem Log.
 6. Öffnet **Checkout**. Prüft Repository, Branch/Commit und den erfolgreichen Checkout.
 7. Öffnet **Umgebung anzeigen**. Sucht die drei Ausgaben `Hallo aus Azure Pipelines`, `Build ID: …` und `Agent: Linux` bei dem vorgesehenen Ubuntu-Pool.
@@ -90,11 +94,13 @@ Zeigt jedes Element im Editor und seinen sichtbaren Effekt im Log. `trigger: non
 ## 5. Build Validation aus Lab03 nachziehen
 
 1. Nach einem erfolgreichen Start öffnet **Repos → Branches → main → … → Branch policies → Build Validation → +**.
-2. Wählt **orderflow-ci**, **Automatic**, **Required**, keinen Path filter und möglichst sofortige Neuprüfung bei Änderungen an `main`.
+2. Wählt **orderflow-ci**, **Automatic**, **Required**, keinen Path filter und **Build expiration: Immediately when main is updated**.
 3. Speichert und notiert: Dieser erste Build prüft bisher nur den technischen Start. Die fachliche Test- und Paketprüfung folgt in Lab05.
-4. Lasst die Pipeline-Verantwortlichen die offene Rechtekonfiguration aus Lab02 mit den Testkonten prüfen.
+4. Prüft mit eurem eigenen Teilnehmerkonto die gespeicherten Gruppenrechte aus Lab02 einschließlich Vererbung. Zusätzliche Testkonten oder Rollen-Logins sind nicht erforderlich; dies ist eine Konfigurationsprüfung.
 
 ## 6. Ergebnisprüfung
+
+Speichere Protokoll und Screenshots in `lab04-durchfuehrung`: Pipeline-Datei/Branch/Pfad, Gruppenrechte, gespeicherte Build Validation sowie Runstatus, Image, Checkout und Task-Ausgabe. Der tatsächliche Erfolg von Checkout belegt die funktionierende Repository-Leseberechtigung der Pipeline. Ein eigener Benutzer-Login ist nicht deren Build-Service-Identität.
 
 - [ ] Die Pipeline lädt die richtige Datei aus `orderflow-app`.
 - [ ] Der Run ist erfolgreich; eventuelle Kapazitätsprobleme sind ausdrücklich offen dokumentiert.

@@ -1,31 +1,41 @@
 # Lab 07 – Troubleshooting Challenge
 
-**Dauer:** 50 Minuten · **Arbeitsform:** Zweierarbeit  
+> Synchronisierte Kopie der [maßgeblichen Lab-Anweisung](../../labs/07_Troubleshooting_Challenge.md). Diese Anleitung verwendet die Voraussetzungen und Vorlagen aus dem vollständigen Kurspaket `devops-2/`. Nach einem Import des Repositories öffnest du diese Begleitdateien im separat bereitgestellten Kurspaket; die relativen Verweise darauf sind für dessen lokale Ordnerstruktur ausgelegt.
+
+**Start:** Beginne dieses Lab erst, wenn der Trainer dazu auffordert.
+
+**Dauer:** 50 Minuten · **Arbeitsform:** Einzelarbeit mit einem Zugang  
 **Organisation:** [ppedv-courses](https://dev.azure.com/ppedv-courses)  
-**Voraussetzung:** Lab-Repository mit `broken/`, Agentzugang und für Fall F die Trainings-Environments aus [Lab06](Lab06.md).
+**Akteur:** du mit dem persönlichen Basic-Kurskonto im Teilnehmerprojekt aus [Kursvoraussetzungen und Teilnehmerzuordnung](../../VORAUSSETZUNGEN.md). **Voraussetzung:** Lab01–06 abgeschlossen, Project-Administrator-Rechte, Repo **orderflow-app**, Pool **Azure Pipelines**, Image **ubuntu-latest**. Fall F verwendet exakt **orderflow-release** und **orderflow-staging** aus [Lab06](Lab06.md).
 
 ## Ziel und Regeln
 
-Löst mindestens **zwei** Fehlerfälle. Beide Teilnehmer lesen die Logs und müssen den Weg von der Hypothese zum Minimalfix erklären können. Arbeitet in einem gemeinsam festgelegten eigenen Trainingsprojekt in **ppedv-courses**; verändert keine fremden Pipelines oder Ressourcen.
+Bearbeitet im Pflichtpfad **Fall A und Fall F** und speichert zwei eigene Diagnoseprotokolle in eurer Lab07-Ablage. Fall A führt ihr hier neu aus; für Fall F verwendet ihr eure eigenen Fehler- und Reparaturnachweise aus Lab06 einschließlich der vor dem Fix notierten Hypothese. Arbeitet ausschließlich in eurem eigenen Trainingsprojekt in **ppedv-courses** mit eurem regulären Teilnehmerkonto. Ein weiterer Zugang, ein Partner oder eine Erklärung gegenüber einem anderen Team sind nicht erforderlich.
+
+Fall A benötigt keine Environments: Die fehlerhafte YAML wird im Validierungsdialog belegt, der korrigierte Stand einmal auf dem Agent ausgeführt. Fall F erzeugt bei vollständigen eigenen Belegen aus Lab06 keine weiteren Runs. Fälle B–E sind Vertiefung nach Aufforderung des Trainers. Fehlt ein eigener Nachweis für F, vervollständigt ihn mit dem Trainer anhand des Ablaufs in Lab06, statt einen fremden Run zu verwenden. Für eigene PRs gilt die Selbstfreigabe aus Lab03: eigene Zustimmung erlaubt, mindestens eine Zustimmung und die übrigen Pflichtprüfungen bleiben bestehen, kein Bypass. Für einen eigenen Production-Run muss euer Konto gemäß Lab06 als Approver benannt und Selbstfreigabe aktiviert sein.
 
 | Abschnitt | Zeit | Ergebnis |
 |---|---|---|
-| Testaufbau und erster Fall | 20 Min | Fehler reproduziert, belegt, korrigiert |
-| Zweiter Fall | 20 Min | Zweites vollständiges Diagnoseprotokoll |
+| Fall A: Testaufbau, Schemafehler und Reparatur | 20 Min | Validierungsfehler belegt, korrigierter Stand einmal erfolgreich ausgeführt |
+| Fall F: eigene Belege aus Lab06 auswerten | 20 Min | Zweites vollständiges Diagnoseprotokoll ohne erneuten Fehler-/Reparaturlauf |
 | Erklärung und Abnahme | 10 Min | Ursache, Minimalfix und Vorbeugung nachvollziehbar |
 
 Die Hinweise zur Korrektur sind unten eingeklappt. Öffnet sie erst nach eigener Hypothese. Erwartete Fehlermeldungen sind Anhaltspunkte; dokumentiert die tatsächlich angezeigte Meldung aus eurem Run.
 
-## 1. Testpipeline und Branches vorbereiten
+## 1. Testpipeline und Branches für A–E vorbereiten
 
-1. Öffnet **Repos → Files → orderflow-app → main** und prüft den Ordner [`broken/`](../broken/).
-2. Erstellt für jeden gewählten Fall einen eigenen Branch, beispielsweise `feature/lab07-b-<kuerzel>`, aus einem gültigen `main`.
+Für Fall F verwendet ihr direkt das dort beschriebene Setup mit `orderflow-release`; dafür legt ihr keine zweite Release-Pipeline an.
+
+1. Öffnet in eurem Teilnehmerprojekt **Repos → Files → orderflow-app → main** und prüft den Ordner [`broken/`](../broken).
+2. Erstellt für jeden gewählten Fall aus einem gültigen `main` einen eigenen Branch: `feature/lab07-<fall>-<kuerzel>`. Ersetzt `<fall>` durch a, b, c, d oder e und `<kuerzel>` durch euren Eintrag in der [Teilnehmerzuordnung](../../VORAUSSETZUNGEN.md#teilnehmerprojekte-und-kürzel).
 3. Erstellt unter **Pipelines → New pipeline → Azure Repos Git → orderflow-app → Existing Azure Pipelines YAML file** eine separate Testpipeline mit dem gewählten Branch und der Datei des Falls.
-4. Benennt sie eindeutig, etwa `orderflow-debug-b-<kuerzel>`. Verändert nicht den YAML-Pfad von `orderflow-ci` oder `orderflow-release` für die Fälle A–E.
+4. Benennt sie eindeutig, `orderflow-debug-<fall>-<kuerzel>` mit demselben Fallbuchstaben und persönlichen Kürzel. Verändert nicht den YAML-Pfad von `orderflow-ci` oder `orderflow-release` für die Fälle A–E.
 5. Startet manuell und wählt ausdrücklich den Testbranch. Die Fehlerdateien verwenden `trigger: none`; ein Commit startet sie nicht automatisch. Nach jedem Fix ist ein neuer manueller Run auf dem korrigierten Commit nötig.
 6. Bei Fall A kann die Schemafehler-Prüfung bereits das Speichern/Starten verhindern. Das ist der erwartete Reproduktionsbeleg; eine Run-ID gibt es dann noch nicht.
 
-## 2. Vor jeder Änderung das Diagnoseprotokoll ausfüllen
+## 2. Diagnoseprotokoll führen
+
+Reproduziert zuerst den Fehler und füllt die Felder bis einschließlich „Kleinste Änderung“ vor dem Fix aus. Ergänzt „Neuer Commit/Run“ und „Vorbeugung“ nach der erneuten Prüfung.
 
 | Feld | Einzutragen |
 |---|---|
@@ -42,7 +52,29 @@ Die Hinweise zur Korrektur sind unten eingeklappt. Öffnet sie erst nach eigener
 
 Öffnet **Pipelines → Testpipeline → Run → fehlgeschlagener Job/Step**. Beginnt bei der ersten inhaltlichen Fehlermeldung, nicht bei einem späteren Sammel-Exit-Code. Bei einer übersprungenen Stage prüft zuerst Abhängigkeit und Bedingung.
 
+### Diagnosematrix
+
+| Phase | Typische Indizien | Erste Prüfung |
+|---|---|---|
+| Parse/Compile | Run startet nicht, YAML-Zeile genannt | Einrückung, Schema, Template-Expansion |
+| Queue | Job wartet oder findet keinen Agent | Pool, Parallelität, Demands, Autorisierung |
+| Checkout | Repository nicht erreichbar | Build-Service-Identität, Repo-Recht, Branch |
+| Task | konkreter Exit Code | erste Fehlermeldung im fehlgeschlagenen Step |
+| Artefakt | publish/download findet nichts | Pfad, Name, Stage-Abhängigkeit |
+| Deployment | Environment/Connection verweigert | Pipeline Permission, Rolle, Check, Identität |
+
 ## 3. Die Fehlerfälle bearbeiten
+
+Die Dateien liegen in deinem Projekt unter **Repos → Files → orderflow-app → main → broken/** und als lokale Originale unter [lab-repo/broken](../broken).
+
+| Fall | Datei / Setup | Schwerpunkt |
+|---|---|---|
+| A | `01_yaml_structure.yml` | Parse-/Compile-Fehler durch falsche Hierarchie |
+| B | `02_wrong_path.yml` | Task-Fehler durch falschen Skriptpfad |
+| C | `03_missing_variable.yml` | Runtime-Fehler durch inkonsistenten Variablennamen |
+| D | `04_artifact_name.yml` | Artefakt kann wegen Namensabweichung nicht geladen werden |
+| E | `05_condition.yml` | Stage wird durch falsche Bedingung übersprungen |
+| F | `orderflow-release` an `orderflow-staging` vorübergehend entfernen | Resource Authorization / Permission denied |
 
 ### Fall A – YAML-Hierarchie
 
@@ -143,7 +175,7 @@ Der veröffentlichte Name ist `orderflow-package`; im Download steht fälschlich
 1. Für den Fehlernachweis startet ihr diese unveränderte Fehlerdatei manuell aus **main**. Sie liegt bereits dort im importierten Übungsordner. Erwartet: Build grün, Deploy übersprungen.
 2. Prüft die Condition und den tatsächlichen Wert von `Build.SourceBranch`. Für einen Logbeleg könnt ihr auf eurem Testbranch einen reinen Diagnose-Step `Write-Host "Source branch: $(Build.SourceBranch)"` ergänzen.
 3. Korrigiert die Branchbedingung auf eurem Testbranch und prüft einen Run dort. Ein bewusst nur für main erlaubtes Deployment soll auf dem Feature-Branch weiterhin übersprungen werden.
-4. Für den positiven main-Nachweis übernehmt ihr die korrigierte Übungsdatei per regulärem PR ins eigene Trainingsprojekt, sofern das mit dem Trainer vorgesehen ist. Startet danach explizit **main**. Alternativ analysiert einen vorbereiteten korrigierten main-Run des Trainers; bezeichnet den eigenen Feature-Branch-Run nicht als main-Nachweis.
+4. Für den positiven main-Nachweis übernehmt ihr die korrigierte Übungsdatei per eigenem PR nach `main`. Prüft den Diff, genehmigt den PR selbst gemäß Lab03 und mergt erst nach erfüllten Pflichtprüfungen ohne Bypass. Startet die Testpipeline danach explizit aus **main** und belegt den erfolgreichen Deploy-Job. Der Feature-Branch-Run allein ist kein main-Nachweis.
 
 <details>
 <summary>Korrekturhinweis</summary>
@@ -157,15 +189,17 @@ condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main
 
 ### Fall F – Environment-Autorisierung
 
-**Setup:** `orderflow-release` und die simulierten Trainings-Environments aus Lab06. Wählt nur euer eigenes Trainings-Environment und stellt sicher, dass gerade kein anderer Kurs-Run darauf angewiesen ist.
+**Setup:** Verwende **orderflow-release** und das leere **orderflow-staging** in deinem eigenen Teilnehmerprojekt. Du verwaltest dieses Environment mit demselben Konto. Prüfe **Pipelines → orderflow-release → Runs** und warte, bis deine bereits gestarteten Runs beendet sind. Die Production-Approval-Konfiguration bleibt unverändert.
 
-1. Sichert unter **Pipelines → Environments → orderflow-prod → … → Security** den Ausgangsstand der **Pipeline permissions**. Notiert den exakten Pipeline-Namen und dass Open access deaktiviert ist.
+Im Pflichtablauf hast du den Staging-Test in Lab06 bereits selbst vollständig durchgeführt. Verwende genau dessen Fehlerbeleg und gemeinsamen Wiederherstellungs-/Approval-Lauf sowie deine vor der Reparatur notierte Hypothese. Ergänze das Diagnoseprotokoll und die Vorbeugung; löse den Fehler nicht erneut aus. Die folgenden Schritte dienen zum Abgleich der Belege und nur bei tatsächlich fehlenden eigenen Nachweisen zur Vervollständigung mit dem Trainer. Eine bloße fremde Referenz genügt nicht.
+
+1. Sichert unter **Pipelines → Environments → orderflow-staging → … → Security** den Ausgangsstand der **Pipeline permissions**. Notiert den exakten Pipeline-Namen und dass Open access deaktiviert ist.
 2. Entfernt ausschließlich die Zuordnung von **orderflow-release**. Lasst Benutzerrollen, Environment und Approval-Check unverändert.
 3. Startet einen neuen Release-Run. Erwartet eine Meldung über ein nicht autorisiertes oder nicht auffindbares Environment beziehungsweise eine Autorisierungsanforderung. Der Fehler kann bereits vor der Ausführung der Stages auftreten.
 4. Speichert Run/Validierung und die genaue Meldung. Erteilt noch keine pauschale Autorisierung über einen Run-Dialog.
 5. Prüft zuerst Schreibweise und Existenz des Environments, dann die gezielte Pipeline Permission.
-6. Öffnet als Ressourcenverantwortlicher dieselbe **Security → Pipeline permissions → +** und fügt genau **orderflow-release** wieder hinzu.
-7. Startet einen neuen Run. Erwartet erfüllte Ressourcenautorisierung; der Produktions-Approval kann weiterhin warten. Das ist kein fortbestehender Berechtigungsfehler.
+6. Beendet einen noch wartenden Negativlauf. Öffnet mit eurem weiterhin angemeldeten Teilnehmerkonto dieselbe **Security → Pipeline permissions → +** und fügt genau **orderflow-release** wieder hinzu. Stellt den Ausgangszustand auch dann wieder her, wenn der Negativtest anders als erwartet verlief.
+7. Startet einen neuen Run. Erwartet erfüllte Ressourcenautorisierung; der Produktions-Approval kann weiterhin warten. Das ist kein fortbestehender Berechtigungsfehler. Prüft Artefakt, Commit und Staging und gebt den eigenen Lauf gemäß Lab06 mit eurem benannten Approver-Konto frei. Belegt danach das erfolgreiche simulierte Deployment. Die Selbstfreigabe-Option ersetzt nicht die Benennung als Approver.
 8. Belegt den wiederhergestellten Endstand. Kein Open access als Reparatur.
 
 <details>
@@ -176,18 +210,23 @@ Benutzerrolle des handelnden Administrators, Pipeline-Autorisierung und menschli
 
 ## 4. Abnahme
 
-- [ ] Mindestens zwei Fälle wurden vor der Änderung reproduziert.
+Speichere beide Diagnoseprotokolle, Fehler-/Reparaturnachweise und die Erklärung in `lab07-durchfuehrung`. Link, Branch, Commit und Run müssen dein eigenes Teilnehmerprojekt bezeichnen. Die Organisation besitzt einen Microsoft-hosted Paralleljob; lasse wartende Runs in der Queue und erzeuge keine Duplikate.
+
+- [ ] Fall A und Fall F sind vor der jeweiligen Korrektur belegt; für F stammen die eigenen Belege aus Lab06.
 - [ ] Diagnoseprotokolle enthalten Phase, Meldung, Hypothese und Minimalfix.
 - [ ] Nach jedem Fix wurde der neue Commit tatsächlich ausgeführt oder validiert.
 - [ ] Grün, erwartetes Warten und erwartetes Überspringen werden unterschieden.
 - [ ] Entfernte Autorisierungen sind wiederhergestellt.
-- [ ] Beide Teilnehmer können mindestens einen Fall erklären und eine passende Vorbeugung nennen.
+- [ ] Alle Schritte wurden mit dem eigenen Teilnehmerkonto durchgeführt.
+- [ ] Zu einem Fall liegt eine eigene schriftliche Erklärung mit passender Vorbeugung vor.
 
-Erklärt euren Fall anschließend einem anderen Zweierteam, ohne sofort den korrigierten Code zu zeigen: Beginnt mit Symptom, Phase und Beleg.
+Schreibt zu einem der beiden Fälle 5–8 Sätze: Symptom, Fehlerphase, entscheidender Beleg, Ursache, Minimalfix, Ergebnis und Vorbeugung. Verweist auf euren Fehler- und Reparaturnachweis. Prüft selbst, ob eine andere Person die Diagnose anhand dieser Angaben nachvollziehen könnte. Eine tatsächliche Partnerprüfung ist nicht erforderlich.
+
+Lege die zwei Diagnoseprotokolle und diese Erklärung unter `devops-2-nachweise/lab07-durchfuehrung` ab. Ein Upload oder Versand ist für diese Abnahme nicht erforderlich. Ein nur beschriebener oder fremder Reparaturlauf ersetzt euren eigenen Nachweis nicht.
 
 ## Bonus – Eine begründete Optimierung
 
-Wählt genau eine Änderung an einer grünen Pipeline und belegt den Nutzen: präzisere geheimnisfreie Logs, weniger unnötige CI-Runs, wiederverwendbare Schritte oder tatsächlich unabhängige parallele Tests. Bei Templates muss `templates/*` im relevanten Pfadfilter berücksichtigt werden. Setzt Retries nur bei nachgewiesenen vorübergehenden Fehlern ein; sie beheben weder falsche Pfade noch fehlende Rechte.
+Wählt genau eine Änderung an einer grünen Pipeline und belegt den Nutzen: präzisere geheimnisfreie Logs, weniger unnötige CI-Runs, wiederverwendbare Schritte oder tatsächlich unabhängige parallele Tests. Bei Templates muss `templates/*` im relevanten Pfadfilter berücksichtigt werden. Ein Cache eignet sich nur für wiederherstellbare Abhängigkeiten. Setzt Timeouts passend zur erwarteten Laufzeit und Retries nur bei nachgewiesenen vorübergehenden Fehlern ein; Retries beheben weder falsche Pfade noch fehlende Rechte.
 
 ## Portalhilfe
 

@@ -1,196 +1,168 @@
-# Lab 01 · Teil B – Projekt und Ressourcen im Portal einrichten
+# Lab 01 – Organisation, Projekt und Ressourcen
 
-**Dauer:** 60 Minuten · **Arbeitsform:** Einzelarbeit im eigenen Trainingsprojekt  
-**Organisation:** [ppedv-courses](https://dev.azure.com/ppedv-courses)  
-**Voraussetzung:** Eure Skizze aus Teil A zum Produkt OrderFlow liegt vor.
+> Synchronisierte Kopie der [maßgeblichen Lab-Anweisung](../../labs/01_Organisation_Projekt_Ressourcen.md). Diese Anleitung verwendet die Voraussetzungen und Vorlagen aus dem vollständigen Kurspaket `devops-2/`. Nach einem Import des Repositories öffnest du diese Begleitdateien im separat bereitgestellten Kurspaket; die relativen Verweise darauf sind für dessen lokale Ordnerstruktur ausgelegt.
 
-## Ziel und Ablauf
+**Start:** Beginne dieses Lab erst, wenn der Trainer dazu auffordert.
 
-Übertragt zuerst eure Überlegungen aus Teil A in eine reale Azure-DevOps-Struktur. Nach einer Zwischenabnahme ergänzt ihr eine zweite Produktlinie und begründet die passende Projektgrenze.
+**Vor Beginn:** [Kursvoraussetzungen und Teilnehmerzuordnung](../../VORAUSSETZUNGEN.md) lesen. **Akteur Teil B:** du mit deinem persönlichen Basic-Kurskonto. Projektname und Kürzel stehen in der Tabelle „Teilnehmerprojekte und Kürzel“ in den Kursvoraussetzungen.
 
-| Phase | Zeitrahmen | Ergebnis |
-|---|---|---|
-| 1. OrderFlow umsetzen – Schritte 1 bis 6 | ca. 25 Minuten | Privates Projekt, Team, Areas, Sprints und zwei Repositories |
-| 2. Zweite Produktlinie – Schritt 7 | ca. 20 Minuten | Begründete Strukturentscheidung und zusätzliches Produktteam |
-| 3. Prüfen und reflektieren – Schritt 8 | ca. 15 Minuten | Ergebnisprüfung, Abnahme und Reflexion |
+## Ziel
 
-Bleibt während des gesamten Labs in **ppedv-courses**. Erstellt keine neue Organisation. Nutzt ausschließlich euer Trainingsprojekt. Existiert eine Ressource dort schon, prüft und ergänzt sie; legt kein Duplikat an. Fehlen Rechte, verwendet das vom Trainer vorbereitete Projekt und meldet die konkrete fehlende Berechtigung.
+Eine sinnvolle Azure-DevOps-Struktur für ein Produktteam entwerfen und die wichtigsten Projektressourcen einrichten.
 
-Die Portalbezeichnungen sind hier auf Englisch angegeben. Je nach Sprache findet ihr etwa **Project settings / Projekteinstellungen** und **Repos / Repositorys**.
+Gesamtzeit: 85 Minuten in zwei Teilen.
 
-## 1. Privates Projekt erstellen oder prüfen
+- Teil A: 25 Minuten DevOps-/Struktur-Entscheidung
+- Teil B: 60 Minuten Konfiguration im Portal
 
-1. Öffnet [ppedv-courses](https://dev.azure.com/ppedv-courses). Kontrolliert den Organisationsnamen in der Adresszeile.
-2. Wählt **New project**. Falls ihr ein vorbereitetes Projekt verwendet, öffnet dieses und prüft seine Einstellungen.
-3. Tragt folgende Werte ein. Ersetzt `<gruppe>` durch euer vereinbartes, eindeutiges Kürzel.
+## Arbeitsform
 
-   | Feld | Wert |
-   |---|---|
-   | Project name | `orderflow-<gruppe>` |
-   | Description | `Trainingsprojekt für Contoso OrderFlow – Entwicklung, QA und Betrieb` |
-   | Visibility | **Private** |
-   | Advanced → Version control | **Git** |
-   | Advanced → Work item process | **Agile**, sofern der Trainer nichts anderes vorgibt |
+- Teil A wird zu zweit bearbeitet.
+- Teil B bearbeitet jeder Teilnehmer einzeln in seinem eigenen Trainingsprojekt.
 
-4. Wählt **Create**. Öffnet danach **Project settings → Overview** und prüft Name, Sichtbarkeit und Prozess.
-5. Lasst Boards, Repos und Pipelines für die folgenden Übungen verfügbar.
+## Szenario
 
-**Prüfung:** Kontrolliert in der Projektübersicht Name, **Private** und Prozess. Notiert die Projekt-URL.
+Contoso entwickelt den Dienst „OrderFlow“. Ein Produktteam aus Entwicklung, QA und Betrieb liefert gemeinsam. Zusätzlich arbeitet ein externer Reviewer zeitweise mit.
 
-## 2. OrderFlow-Team einrichten
+## Teil A – DevOps-Gesundheitscheck
 
-1. Öffnet **Project settings → Teams**.
-2. Verwendet bevorzugt das bei der Projekterstellung angelegte Standardteam: öffnet es, wählt **Settings** und ändert den Teamnamen auf `OrderFlow Product`. Speichert die Änderung.
-3. Falls ein vorbereitetes Projekt ein gemeinsam genutztes Standardteam hat, verändert dieses nicht. Legt stattdessen über **New team** das Team `OrderFlow Product` an, sofern es noch fehlt.
-4. Prüft unter **Members**, dass euer vorhandenes Kurskonto Mitglied ist. Fügt nur bereits für eure Gruppe vorgesehene Konten hinzu.
-5. Optional: Erstellt analog `Platform Enablement`, wenn ihr in Teil A ein eigenes Plattformteam vorgesehen habt.
+Beginnt Teil A nach der Aufforderung des Trainers.
 
-**Nachweis:** Teamliste sowie Teamdetails mit Namen und vorhandener Mitgliedschaft.
+Arbeitsvorlage: [Teilnehmer-Template (SVG)](../../labs/01_Teil_A_DevOps_Gesundheitscheck_Template.svg). Ergänzt die freien Felder und passt Rollen und fachliche Grenzen bei Bedarf an. Markiert den Wartepunkt direkt am Wertstrom. Unter Windows: Öffne die SVG im Browser, nimm die Vorlage mit `Windows+Umschalt+S` auf, öffne Paint und füge sie mit `Strg+V` ein. Ergänze Textfelder und Markierungen mit den Text-/Zeichenwerkzeugen und speichere `lab01-gesundheitscheck.png` in `devops-2-nachweise/lab01-durchfuehrung`. Bei Partnerarbeit bespricht ihr die Inhalte gemeinsam; jeder kann sie direkt in seiner eigenen Kopie eintragen.
 
-## 3. Area Paths anlegen und dem Team zuordnen
+**Akteure:** du und eine weitere teilnehmende Person. Bearbeitet gemeinsam dieselbe Skizze; jeder speichert eine Kopie in seiner eigenen Lab01-Ablage. Es werden weder Kurskonten noch Kennwörter geteilt. Bearbeitet zu zweit:
 
-1. Öffnet **Project settings → Project configuration → Areas**.
-2. Wählt beim Projektknoten **… → New child** und legt `OrderFlow` an.
-3. Legt auf derselben Ebene `Platform` an. Falls die Team-Erstellung bereits einen passenden Area Path erzeugt hat, verwendet diesen, statt ihn doppelt anzulegen.
-4. Öffnet **Project settings → Team configuration → Areas**. Wählt oben ausdrücklich das Team **OrderFlow Product**.
-5. Wählt **Select area(s)** und fügt `<projekt>\OrderFlow` hinzu.
-6. Wählt beim hinzugefügten Pfad **… → Set as default**. Der Standard-Area-Path muss `<projekt>\OrderFlow` sein.
-7. Prüft, dass das Team nur seine vorgesehenen Areas umfasst. Entfernt gegebenenfalls den Projektwurzel-Pfad **aus der Teamzuordnung**, nachdem der neue Standard gesetzt wurde. Löscht dabei keinen Area Path aus der Projektkonfiguration. So gelangen `Platform` und später die zweite Produktlinie nicht automatisch in das OrderFlow-Board.
-8. Falls ihr `Platform Enablement` angelegt habt, wiederholt die Teamzuordnung mit `<projekt>\Platform` als Standard.
+1. Skizziert den Wertstrom von einer Anforderung bis zum Feedback aus dem Betrieb.
+2. Markiert die längste Wartezeit und ein fehlendes oder verspätetes Feedbacksignal.
+3. Zeichnet beteiligte Teams, fachliche Verantwortungsgrenzen und wichtige Ressourcen ein.
+4. Formuliert eine kleine, testbare Verbesserung für den wahrscheinlichsten Engpass.
 
-**Sollzustand:** `OrderFlow Product → OrderFlow`; optional `Platform Enablement → Platform`. Für die hier flache Struktur werden keine Unter-Areas benötigt. Area Paths ordnen Work Items fachlich zu; sie vergeben keine Repositoryrechte.
+### Abnahme
 
-**Prüfung:** Kontrolliert den Area-Baum und je konfiguriertem Team die Areas mit ihrer Standardzuordnung.
+Die Skizze enthält mindestens:
 
-## 4. Zwei Sprints konfigurieren
+- den Weg einer Änderung bis zum Betriebsfeedback,
+- den wahrscheinlichsten Wartepunkt,
+- ein fehlendes oder verspätetes Feedbacksignal,
+- beteiligte Teams oder Rollen und ihre fachlichen Verantwortungsgrenzen,
+- eine testbare Verbesserungshypothese.
 
-1. Öffnet **Project settings → Project configuration → Iterations**.
-2. Legt unter dem Projektknoten über **New child** die Iterationen `Sprint 01` und `Sprint 02` an. Öffnet jeweils **Edit** und setzt Start- und Enddatum.
-3. Verwendet die Kursvorgaben. Für den Kurs am 5./6. Oktober 2026 passen beispielsweise:
+Die konkrete Abbildung mit Azure-DevOps-Projekten, Teams und Area Paths folgt nach der Einführung dieser Begriffe in Teil B.
+
+## Teil B – Projekt und Ressourcen im Portal einrichten
+
+Beginne Teil B erst nach der gesonderten Aufforderung des Trainers. Melde dich mit deinem persönlichen Kurskonto gemäß [Konto und Anmeldung](../../VORAUSSETZUNGEN.md#konto-und-anmeldung) an und prüfe deinen Namen im Kontomenü.
+
+**Akteur für alle folgenden Schritte: du.** Verwende die Organisation **ppedv-courses** und den Projektnamen aus [Teilnehmerzuordnung](../../VORAUSSETZUNGEN.md#teilnehmerprojekte-und-kürzel). `orderflow-solutions` ist das bestehende Lösungsprojekt und wird nicht bearbeitet. Der Kursadministrator hat die in den [Voraussetzungen](../../VORAUSSETZUNGEN.md) genannten organisationsweiten Aufgaben vor Kursbeginn zu erledigen.
+
+### 1. Privates Projekt erstellen
+
+1. Öffne [ppedv-courses](https://dev.azure.com/ppedv-courses) → **New project**.
+2. Setze **Project name** auf deinen Tabellennamen, **Description** auf `devops-2 – persönliches OrderFlow-Trainingsprojekt`, **Visibility: Private**, **Advanced → Version control: Git**, **Work item process: Basic**. Dies ist die Prozessauswahl für Boards, unabhängig vom ebenfalls Basic genannten Access Level deines Kontos. Wähle **Create**.
+3. Öffne **Project settings → Overview** und prüfe Name, Private, Git und Basic. Boards, Repos und Pipelines bleiben aktiviert.
+4. Öffne **Project settings → Permissions → Project Administrators → Members** und prüfe deine Mitgliedschaft. Sie wird für die weiteren Konfigurationsaufgaben benötigt; behalte sie während des Kurses.
+5. Speichere die Projekt-URL in deinem Lab01-Protokoll. Kontrolliere in jedem weiteren Lab die Projektbezeichnung oben links.
+
+Bei einer Wiederaufnahme nach Unterbrechung öffnest du dein bereits erstelltes Projekt aus der Tabelle und setzt am ersten unvollständigen Schritt fort. Erstelle kein zweites gleichnamiges Projekt und lösche keine vorhandenen Inhalte. Ein tatsächlicher Fehler bei der Projektanlage wird nach dem Fehlerweg in den Kursvoraussetzungen behoben; die Anleitung setzt kein unbekanntes Ersatzprojekt voraus.
+
+### 2. Teams und eigene Mitgliedschaft
+
+1. Öffne **Project settings → Teams**, öffne das automatisch angelegte Standardteam und benenne es unter **Settings** in `OrderFlow Product` um.
+2. Öffne **Members** und prüfe, dass dein persönliches Kurskonto Mitglied ist. Füge über **Add** genau dein Konto hinzu, wenn die Mitgliederliste nach der Anlage leer ist. Kontrolliere den vollständigen Kontonamen im Suchergebnis.
+3. Erstelle unter **Teams → New team** zusätzlich `Platform Enablement`. Deaktiviere die automatische Team-Area-Anlage im Erstellungsdialog; die Areas werden im nächsten Schritt mit festen Namen erstellt. Füge dein eigenes Konto als Mitglied hinzu.
+4. Notiere dich als Verantwortlichen beider Teams. Weitere Teilnehmerkonten werden nicht hinzugefügt.
+
+### 3. Areas zuordnen
+
+1. Öffne **Project settings → Project configuration → Areas**. Erstelle über **Projektknoten → … → New child** die Areas `OrderFlow` und `Platform` direkt unter dem Projekt.
+2. Öffne **Project settings → Team configuration → Areas** und wähle oben **OrderFlow Product**.
+3. Füge über **Select area(s)** `<projekt>\OrderFlow` hinzu und setze diesen Pfad über **… → Set as default** als Standard.
+4. Entferne den Projektwurzel-Pfad aus der **Teamzuordnung**, sobald der neue Standard gesetzt ist. Lösche keinen Area Path aus dem Projekt. Die Liste des Teams soll nur `OrderFlow` enthalten.
+5. Wiederhole die Zuordnung für **Platform Enablement** mit `<projekt>\Platform` als einzigem Standardeintrag.
+6. Öffne beide Teamseiten erneut und sichere jeweils einen Screenshot mit Teamname und Area.
+
+### 4. Feste Kurssprints einstellen
+
+1. Öffne **Project settings → Project configuration → Iterations**.
+2. Erstelle unter dem Projektknoten die folgenden Iterationen und setze über **Edit** die Termine im Kalender:
 
    | Iteration | Start | Ende |
    |---|---|---|
-   | Sprint 01 | 05.10.2026 | 16.10.2026 |
-   | Sprint 02 | 19.10.2026 | 30.10.2026 |
+   | Sprint 01 | 28.09.2026 | 09.10.2026 |
+   | Sprint 02 | 12.10.2026 | 23.10.2026 |
 
-   Bearbeitet ihr das Lab an einem anderen Datum, verschiebt beide Zeiträume so, dass der heutige Tag im ersten Sprint liegt und der zweite anschließend folgt. Vermeidet überlappende Sprints. Bei englischem Datumsformat nutzt den Kalender zur eindeutigen Auswahl.
-4. Öffnet **Project settings → Team configuration → Iterations** und wählt **OrderFlow Product**.
-5. Setzt **Backlog iteration** auf den Projektwurzel-Pfad `<projekt>`. Beide Sprints müssen darunter liegen.
-6. Fügt über **Select iteration(s)** sowohl `Sprint 01` als auch `Sprint 02` hinzu.
-7. Setzt **Default iteration** auf **@CurrentIteration**. Dadurch verwenden neue Einträge aus dem Team-Board standardmäßig den anhand der Daten aktuellen Sprint.
-8. Öffnet **Boards → Sprints**, wählt **OrderFlow Product** und prüft beide Sprints und die Datumsangaben. Wenn kein Sprint als aktuell erscheint, prüft Datum und Teamzuordnung.
-9. Bei einem optionalen Plattformteam weist ihr dieselben beiden Iterationen auch diesem Team zu.
+3. Öffne **Team configuration → Iterations → OrderFlow Product**. Setze **Backlog iteration** auf den Projektwurzel-Pfad, füge über **Select iteration(s)** beide Sprints hinzu und setze **Default iteration: @CurrentIteration**.
+4. Wiederhole diese Einstellungen für **Platform Enablement**.
+5. Öffne **Boards → Sprints**, wähle das jeweilige Team und kontrolliere Termine und Zuordnung. An den Kurstagen 5./6. Oktober ist Sprint 01 aktuell. Eine spätere Wiederholung verändert die angegebenen Kurstermine nicht; außerhalb des Zeitraums ist eine fehlende aktuelle Iteration erwartbar.
 
-**Nachweis:** Projekt-Iterationen mit Datumsangaben und Team-Iterationen mit Backlog-, Default- und ausgewählten Iterationen. Das bloße Anlegen im Projekt weist Sprints noch keinem Team zu.
+### 5. App-Repository importieren
 
-## 5. App-Repository importieren und `main` prüfen
-
-1. Öffnet **Repos → Files** im Trainingsprojekt.
-2. Öffnet oben das Repository-Auswahlmenü und wählt **Import repository**.
-3. Tragt ein:
-
-   | Feld | Wert |
-   |---|---|
-   | Repository type | **Git** |
-   | Clone URL | `https://github.com/rocom-service/devops-lab-repo.git` |
-   | Requires authorization | Nicht aktivieren; die Quelle ist öffentlich |
-   | Name | `orderflow-app` |
-
-4. Startet **Import** und wartet auf den Abschluss. Über diesen Dialog entsteht das neue Repository direkt. Legt vorher keine README und keinen Initial Commit im Ziel an.
-5. Falls `orderflow-app` bereits **leer** existiert, wählt stattdessen auf dessen leerer **Files**-Seite **Import** und dieselbe Clone-URL. Ist es bereits befüllt, prüft den Bestand und importiert nicht erneut darüber.
-6. Kontrolliert auf dem Branch `main`, dass folgende Inhalte direkt in der Repository-Wurzel vorhanden sind:
+1. Öffne **Repos → Files → Repositoryauswahl → Import repository**.
+2. Setze **Repository type: Git**, **Clone URL: `https://github.com/rocom-service/devops-lab-repo.git`**, **Name: `orderflow-app`**. **Requires authorization** bleibt ausgeschaltet: die Kursquelle ist öffentlich.
+3. Wähle **Import** und warte auf den Abschluss. Importiere nicht über bereits befüllte Dateien; bei Wiederaufnahme prüfst du zunächst deren Bestand.
+4. Wähle `orderflow-app` und `main`. Kontrolliere diese 14 Dateien direkt ab Repositorywurzel:
 
    ```text
    README.md
-   scripts/
-     build.ps1
-     test.ps1
-   src/
-     version.txt
-     release-notes.txt
    azure-pipelines.start.yml
    azure-pipelines.solution.yml
    azure-pipelines.multistage.yml
-   templates/
-   broken/
+   scripts/build.ps1
+   scripts/test.ps1
+   src/version.txt
+   src/release-notes.txt
+   templates/build-steps.yml
+   broken/01_yaml_structure.yml
+   broken/02_wrong_path.yml
+   broken/03_missing_variable.yml
+   broken/04_artifact_name.yml
+   broken/05_condition.yml
    ```
 
-   Zusätzliche Lab-Anleitungen im Ordner `labs/` sind in Ordnung. Die Pipeline-Dateien und `scripts/` dürfen nicht unter einem zusätzlichen Ordner `devops-lab-repo/` oder `lab-repo/` liegen.
-7. Öffnet **Repos → Branches** und prüft, dass `main` als Standard markiert ist. Falls nötig, öffnet bei `main` **… → Set as default branch**. Eine Auswahl von `main` im Dateibrowser allein ändert den Default Branch nicht.
-8. Öffnet zusätzlich **Project settings → Repositories → orderflow-app → Settings** und kontrolliert dort den Default Branch, sofern die Oberfläche ihn anzeigt.
+   Zusätzliche Anleitungen unter `labs/` sind zulässig. `scripts/` und die Pipeline-Dateien dürfen nicht unter einem zusätzlichen `lab-repo/`-Unterordner liegen. Die aktive Datei `azure-pipelines.yml` legst du erst in Lab04 an.
+5. Öffne **Repos → Branches**. Markiere `main` über **… → Set as default branch** als Standard; eine reine Auswahl im Dateibrowser genügt nicht. Bereits gesetzter Standard bleibt bestehen.
+6. Öffne `src/version.txt` und prüfe `1.0.0`. Die fehlerhaften Dateien unter `broken/` bleiben zunächst unverändert.
 
-**Nachweis:** Repository-Wurzel auf `main` und Branch-Liste mit Standardmarkierung. Der Import richtet noch keine ausführbare Pipeline ein; diese folgt im Pipeline-Lab.
+**Nur bei tatsächlich fehlgeschlagenem GitHub-Import:** Verwende die mit diesem Kurspaket gelieferten Originaldateien im Ordner [lab-repo](..). Lege unter **Repos → Files → Repositoryauswahl → New repository** das Git-Repo `orderflow-app` mit README an; verwende ein durch den fehlgeschlagenen Import bereits entstandenes leeres Ziel weiter. Ersetze dessen README durch die mitgelieferte README. Lege die übrigen 13 Textdateien jeweils über **… → New → File** mit exakt den oben aufgeführten Pfaden an, kopiere den vollständigen Inhalt der gleichnamigen lokalen Datei und committe auf `main`. Verzeichnisse entstehen aus dem Dateipfad. Kontrolliere danach dieselbe Dateiliste und den Default Branch. Dies ist ein eigenständig ausführbarer Portalweg ohne Git-CLI, PAT oder weiteren Zugang. Eine vorhandene befüllte Lösungsdatei wird nicht ungeprüft überschrieben.
 
-## 6. Infrastruktur-Repository anlegen
+### 6. Infrastruktur-Repository anlegen
 
-1. Öffnet das Repository-Auswahlmenü unter **Repos → Files → New repository**.
-2. Wählt **Git**, den Namen `orderflow-infra` und **Add a README**. Erstellt das Repository.
-3. Öffnet `README.md`, wählt **Edit** und ersetzt den Beispieltext durch:
+1. Öffne **Repos → Files → Repositoryauswahl → New repository**. Wähle **Git**, Name **orderflow-infra**, **Add a README**, und erstelle das Repository.
+2. Öffne `README.md → Edit` und speichere diesen Text mit Commit-Nachricht `docs: describe infrastructure repository`:
 
    ```markdown
    # OrderFlow Infrastructure
 
-   Dieses Repository enthält Infrastrukturdefinitionen und
-   Umgebungskonfigurationen für OrderFlow.
-
-   Geplante Umgebungen: orderflow-staging und orderflow-prod.
-   Zuständig: OrderFlow Product, unterstützt durch Platform Enablement.
-   Geheimnisse werden außerhalb des Repositorys verwaltet.
+   Zweck: Infrastrukturdefinitionen und Umgebungskonfigurationen für OrderFlow.
+   Verantwortlich: OrderFlow Product, unterstützt durch Platform Enablement.
+   Trainings-Environments: orderflow-staging und orderflow-prod.
+   Die Kursdeployments sind Simulationen ohne Azure-Ressourcen.
+   Geheimnisse werden nicht im Repository gespeichert.
    ```
 
-   Passt den Zuständigkeitssatz an eure tatsächlich angelegten Teams an.
-4. Wählt **Commit**, gebt beispielsweise `docs: describe infrastructure repository` ein und bestätigt den Commit auf dem vorhandenen Standardbranch. Verwendet für das Trainingsrepository ebenfalls `main`; falls der initiale Branch anders heißt, erstellt über das Branch-Menü `main` aus diesem Stand und setzt ihn in **Repos → Branches** als Default.
+3. Prüfe **Repos → Branches → main** als Default. Erzeugt die Initialisierung einen anders benannten Branch, erstelle `main` aus dessen aktuellem Stand und setze `main` als Default.
+4. Prüfe selbst den Zwischenstand: privates Basic-Projekt, zwei Teams mit eigenen Areas, beide Sprints je Team und beide Repositories. Sichere die Nachweise in deiner Lab01-Ablage.
 
-**Nachweis:** Repository-Name, `main` und gespeicherte README mit Zweck.
+### 7. NextFlow ergänzen
 
-### Zwischenabnahme nach etwa 25 Minuten
+**Szenario:** Eine zweite Produktlinie nutzt denselben Basic-Prozess, dieselbe Projektverwaltung und dieselben Plattformdienste. Für diese Übung wird deshalb ein weiteres Team im bestehenden Projekt angelegt.
 
-Zeigt dem Trainer das private Projekt, das OrderFlow-Team mit Area/Sprints und beide Repositories. Vergleicht diese Struktur mit den Verantwortlichkeiten aus Teil A. Erst danach bearbeitet ihr die Erweiterung.
+1. Schreibe zwei bis drei Sätze, weshalb getrennte Backlogs hier genügen und unter welchen fachlichen Anforderungen ein eigenes Projekt sinnvoll wäre.
+2. Öffne **Project settings → Teams → New team**. Erstelle **NextFlow Product**, ohne automatische Area-Anlage, und füge ausschließlich dein eigenes Kurskonto als Mitglied hinzu.
+3. Erstelle unter **Project configuration → Areas** die Area `NextFlow` direkt unter dem Projektknoten.
+4. Setze unter **Team configuration → NextFlow Product → Areas** `<projekt>\NextFlow` als einzigen Standardpfad.
+5. Setze unter **Iterations** die Projektwurzel als Backlog iteration, `@CurrentIteration` als Default und wähle Sprint 01 und Sprint 02 aus.
+6. Öffne **Boards → Boards** und **Boards → Sprints** für OrderFlow Product und NextFlow Product. Prüfe die getrennten Teamansichten und die Termine. Ein Team oder Area Path erteilt keine eigenen Repositoryrechte.
 
-## 7. Zweite Produktlinie ergänzen
+## Abnahme und Ablage
 
-**Neue Situation:** Contoso führt eine zweite Produktlinie ein. Sie verwendet dasselbe Prozessmodell und dieselben zentralen Plattformdienste wie OrderFlow. Für diese Übung heißt sie `NextFlow`.
+Speichere in `lab01-durchfuehrung` deine Skizze aus Teil A, das Protokoll und Screenshots dieser Einstellungen:
 
-1. Notiert eure Entscheidung in zwei bis drei Sätzen: weiteres Team im bestehenden Projekt oder eigenes Projekt?
-2. Prüft folgende Leitfragen: Braucht die Produktlinie getrennte Zugriffe, unabhängige Administration oder ein anderes Prozessmodell? Oder genügen getrennte Backlogs bei gemeinsamem Prozess und gemeinsamer Verwaltung?
-3. **Musterentscheidung für die angegebenen Rahmenbedingungen:** ein weiteres Team und ein eigener Area Path im vorhandenen privaten Projekt. Führt dafür die folgenden Schritte aus:
-   - Öffnet **Project settings → Teams → New team** und erstellt `NextFlow Product`.
-   - Fügt die vorgesehenen vorhandenen Gruppenmitglieder hinzu.
-   - Öffnet **Project configuration → Areas** und legt `NextFlow` direkt unter dem Projektknoten an. Falls automatisch eine Area `NextFlow Product` erzeugt wurde, könnt ihr diese zu `NextFlow` umbenennen, solange sie neu und ungenutzt ist.
-   - Wählt **Team configuration → NextFlow Product → Areas** und setzt `<projekt>\NextFlow` als einzigen fachlichen Standardbereich.
-   - Öffnet die **Iterations** dieses Teams. Setzt den Projektwurzel-Pfad als Backlog iteration, wählt `Sprint 01` und `Sprint 02` aus und setzt **@CurrentIteration** als Default iteration.
-   - Kontrolliert in **Boards → Boards** und **Boards → Sprints**, dass ihr `OrderFlow Product` und `NextFlow Product` getrennt auswählen könnt.
-4. **Falls eure begründeten Anforderungen ein eigenes Projekt verlangen:** Legt stattdessen `nextflow-<gruppe>` als privates Git-Projekt in **ppedv-courses** an. Wiederholt dort die Team-, Area- und Sprintkonfiguration aus den Schritten 2 bis 4 für `NextFlow Product` und `NextFlow`. Dokumentiert die zusätzliche Zugriffs- oder Verwaltungsgrenze. Falls euch das Create-Project-Recht fehlt, verwendet ein vorbereitetes Projekt und dokumentiert den offenen Schritt.
-5. Prüft erneut die Area-Zuordnung des OrderFlow-Teams: Es soll nicht ungewollt die Work Items von NextFlow übernehmen.
+- [ ] Projektübersicht mit deinem Projektnamen, Private, Git und Basic.
+- [ ] Drei Teams mit deinem eigenen Konto als Mitglied.
+- [ ] Area-Baum und eindeutige Standardarea jedes Teams.
+- [ ] Sprinttermine und beide zugewiesenen Sprints je Team.
+- [ ] App-Repo mit den 14 Originaldateien auf `main` und Default-Branch-Markierung.
+- [ ] Infra-Repo mit gespeicherter Zweckbeschreibung.
+- [ ] Schriftliche Begründung für NextFlow im selben Projekt.
 
-Für diese Erweiterung sind keine weiteren Repositories und keine Cloudressourcen nötig. Ein eigenes Team oder eine Area erzeugt keine isolierten Repositoryrechte. Die konkrete Berechtigungsvergabe folgt im Berechtigungs-Lab.
-
-**Nachweis:** Entscheidungsbegründung, Teamliste sowie Area- und Sprintkonfiguration des zweiten Teams. Bei zwei Projekten zusätzlich dessen Projektübersicht.
-
-## 8. Ergebnisprüfung und Reflexion
-
-- [ ] Alle Azure-DevOps-Ressourcen liegen in **ppedv-courses**.
-- [ ] Das Trainingsprojekt ist privat und verwendet Git sowie den vereinbarten Prozess.
-- [ ] `OrderFlow Product` besitzt eine passende Area und zwei zugeordnete, datierte Sprints.
-- [ ] `orderflow-app` enthält den Lab-Stand in der Wurzel; `main` ist der Default Branch.
-- [ ] `orderflow-infra` enthält eine gespeicherte README mit seinem Zweck.
-- [ ] Die zweite Produktlinie wurde erst nach dem OrderFlow-Grundaufbau ergänzt.
-- [ ] `NextFlow Product` hat seine eigene Area und Sprintzuordnung; die Projektwahl ist begründet.
-- [ ] Die Einstellungen sind geprüft; fehlende Rechte und noch offene Schritte sind gekennzeichnet.
-
-Beantwortet abschließend:
-
-1. Was müsste bei einem späteren Projektwechsel migriert oder neu geprüft werden?
-2. Warum benötigen produktive Environments und Service Connections klar benannte, eng begrenzte Verantwortliche?
-3. Welche Aufgaben gehören nach Microsoft Entra ID statt in die Projektkonfiguration?
-
-**Bonus:** Formuliert eine Namenskonvention für Projekte, Teams, Repositories, Environments und Gruppen.
-
-## Weiterführende Portalhilfe
-
-- [Teams und ihre Konfiguration](https://learn.microsoft.com/en-us/azure/devops/organizations/settings/manage-teams?view=azure-devops)
-- [Area Paths und Teamzuordnung](https://learn.microsoft.com/en-us/azure/devops/organizations/settings/set-area-paths?view=azure-devops)
-- [Iterationen und Team-Sprints](https://learn.microsoft.com/en-us/azure/devops/organizations/settings/set-iteration-paths-sprints?view=azure-devops)
-- [Git-Repository importieren](https://learn.microsoft.com/en-us/azure/devops/repos/git/import-git-repository?view=azure-devops)
-
-Die Anleitung folgt dem Kurs `devops-2`, Lab 01 Teil B. Der bestehende OrderFlow-Aufbau und die nachfolgende Erweiterung um das zweite Produktteam bilden zwei aufeinanderfolgende Arbeitsschritte.
