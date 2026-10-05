@@ -1,12 +1,10 @@
 # Lab 05 – Pipeline schrittweise erweitern
 
-> Synchronisierte Kopie der [maßgeblichen Lab-Anweisung](../../labs/05_Pipeline_Erweitern.md). Diese Anleitung verwendet die Voraussetzungen und Vorlagen aus dem vollständigen Kurspaket `devops-2/`. Nach einem Import des Repositories öffnest du diese Begleitdateien im separat bereitgestellten Kurspaket; die relativen Verweise darauf sind für dessen lokale Ordnerstruktur ausgelegt.
-
 **Start:** Beginne dieses Lab erst, wenn der Trainer dazu auffordert.
 
 **Dauer:** 70 Minuten · **Arbeitsform:** Einzelarbeit mit kurzen Prüfschritten  
 **Organisation:** [ppedv-courses](https://dev.azure.com/ppedv-courses)  
-**Akteur:** du mit deinem persönlichen Basic-Kurskonto im Teilnehmerprojekt aus [Kursvoraussetzungen und Teilnehmerzuordnung](../../VORAUSSETZUNGEN.md), weiterhin Project Administrator. **Voraussetzung:** [Lab04](Lab04.md) abgeschlossen: `orderflow-ci` nutzt `/azure-pipelines.yml` in `orderflow-app/main`, der Startlauf ist erfolgreich und Build Validation ist Required/Automatic. Pool **Azure Pipelines**, Image **ubuntu-latest**; ein gemeinsamer Paralleljob, deshalb wartende Runs nicht doppelt starten.
+**Umgebung:** Persönliches Kurskonto im zugeordneten Projekt; Lab04 ist abgeschlossen. `orderflow-ci` verwendet `/azure-pipelines.yml`, der Startlauf ist erfolgreich und Build Validation ist Required/Automatic. Ein gemeinsamer Microsoft-hosted Paralleljob: wartende Runs weiterverwenden.
 
 ## Ziel und Ablauf
 
@@ -15,15 +13,15 @@ Erweitert den Startstand zu einer Pipeline mit CI-Trigger, Konfigurationsvariabl
 | Abschnitt | Zeit | Ergebnis |
 |---|---|---|
 | Trigger, Variable, Test und Paketierung aufbauen | 25 Min | Vollständige YAML mit Stage und Job, ein gemeinsamer Commit |
-| Ersten CI-Run und Artefakt prüfen | 20 Min | Konfiguration, Quellprüfung und orderflow-package mit drei Dateien belegt |
-| Negativtest und PR-Validierung | 25 Min | Fehler belegt, korrigierter Stand grün |
+| Ersten CI-Run und Artefakt prüfen | 20 Min | Konfiguration, Quellprüfung und Paketinhalt geprüft |
+| Negativtest und PR-Validierung | 25 Min | Fehler erkannt, korrigierter Stand grün |
 
 ## 1. Feature-Branch und aktive Datei prüfen
 
 1. Öffnet **Repos → Files → orderflow-app → main**. Prüft, dass `scripts/test.ps1`, `scripts/build.ps1` und die beiden Dateien unter `src/` vorhanden sind.
 2. Erstellt `feature/lab05-<kuerzel>` aus `main`.
 3. Öffnet `azure-pipelines.yml → Edit`. Verwendet von Anfang an die Stage `Build`, den Job `VerifyAndPackage` und dessen Step-Liste aus dem vollständigen Kernstand in Abschnitt 4. Erarbeitet die folgenden Änderungen innerhalb dieser Struktur. Die Datei `azure-pipelines.solution.yml` ist eine Referenz; Änderungen ausschließlich an dieser Referenz würden die aktive Pipeline nicht erweitern.
-4. Notiere den aktuellen Inhalt von `src/version.txt` für die Wiederherstellung. Im unveränderten Starter aus Lab01 lautet er `1.0.0`.
+4. Prüfe den aktuellen Inhalt von `src/version.txt`. Für die spätere Wiederherstellung kannst du ihn über die Dateihistorie erneut öffnen; im unveränderten Starter lautet er `1.0.0`.
 
 ## 2. CI-Trigger und Variable ergänzen
 
@@ -96,10 +94,11 @@ Erweitert den Startstand zu einer Pipeline mit CI-Trigger, Konfigurationsvariabl
        artifact: orderflow-package
    ```
 
-2. Vergleicht die gesamte Datei mit dem folgenden Kernstand einschließlich Stage und Job. Committet den Aufbau aus Abschnitten 2–4 einmal auf dem Feature-Branch. Öffnet **Pipelines → orderflow-ci → Runs** und prüft den automatisch gestarteten CI-Run für diesen Commit. Falls er fehlt, kontrolliert Branchname, aktiven YAML-Pfad und deaktivierte/überschriebene Trigger unter den Pipeline-Einstellungen. Ein manueller Run ersetzt keinen CI-Nachweis. Wartet auf den erfolgreichen Run und belegt darin `Build configuration: Release`, `Validation successful for version …` sowie die erfolgreiche Paketierung und Veröffentlichung.
+2. Vergleicht die gesamte Datei mit dem folgenden Kernstand einschließlich Stage und Job. Committet den Aufbau aus Abschnitten 2–4 einmal auf dem Feature-Branch. Öffnet **Pipelines → orderflow-ci → Runs** und prüft den automatisch gestarteten CI-Run für diesen Commit. Falls er fehlt, kontrolliert Branchname, aktiven YAML-Pfad und deaktivierte/überschriebene Trigger unter den Pipeline-Einstellungen. Ein manueller Run ersetzt keinen CI-Nachweis. Wartet auf den erfolgreichen Run und prüft darin `Build configuration: Release`, `Validation successful for version …` sowie die erfolgreiche Paketierung und Veröffentlichung.
 3. Öffnet dessen **Summary → Artifacts** beziehungsweise **Published** und dann `orderflow-package`.
-4. Prüfe die Dateien `version.txt`, `release-notes.txt` und `build-metadata.json`. Wähle im Artefaktmenü **Download artifacts**, entpacke das heruntergeladene Archiv und öffne `build-metadata.json` in einem Texteditor. `configuration` muss `Release` enthalten; `builtAtUtc` muss einen Zeitstempel enthalten. Speichere Dateiliste und die beiden gelesenen Werte mit der Run-ID im Protokoll.
-5. Liefert der Browser während des Downloads tatsächlich keine lesbare Datei, ergänze vor der Veröffentlichung einen PowerShell-Step, der `$(Build.ArtifactStagingDirectory)/package/build-metadata.json` mit `Get-Content -Raw` liest und ausgibt. Committe, warte auf den neuen Run und sichere dessen Log als Metadatenbeleg. Notiere ausdrücklich, dass dieser Nachweis zum neuen Run gehört.
+4. Prüfe die Dateien `version.txt`, `release-notes.txt` und `build-metadata.json`. Wähle im Artefaktmenü **Download artifacts**, entpacke das heruntergeladene Archiv und öffne `build-metadata.json` in einem Texteditor. `configuration` muss `Release` enthalten; `builtAtUtc` muss einen Zeitstempel enthalten. Vergleiche die Dateiliste und die Werte mit dem erwarteten Ergebnis.
+5. Falls sich das Artefakt nicht herunterladen oder öffnen lässt, bitte den Trainer um Unterstützung.
+
 6. Die explizite Bedingung `succeeded()` verhindert Veröffentlichung nach einem fehlgeschlagenen Vorgängerschritt. Ersetzt sie nicht durch einen isolierten Branchvergleich.
 
 ### Vollständiger Kernstand zum Abgleich
@@ -163,39 +162,34 @@ stages:
 ## 5. Fehler gezielt auf dem Feature-Branch erzeugen
 
 1. Ersetzt auf eurem Branch `feature/lab05-<kuerzel>` den Inhalt von `src/version.txt` durch `ungueltig` (ohne Anführungszeichen) und committet.
-2. Öffnet den automatisch gestarteten Run: **Validate source** muss am Versionsformat scheitern; es darf kein Paket veröffentlicht werden. Notiert Fehlermeldung, Commit und Run-ID.
+2. Öffnet den automatisch gestarteten Run: **Validate source** muss am Versionsformat scheitern; es darf kein Paket veröffentlicht werden. Lest die Fehlermeldung und prüft den zugehörigen Commit.
 3. Stellt die vorherige gültige Version wieder her und committet erneut. Prüft, dass Test, Paketierung und Veröffentlichung wieder erfolgreich sind. Erst den korrigierten Stand nach `main` übernehmen.
 
-## 6. PR-Build-Validation und Pfadfilter nachweisen
+## 6. PR-Build-Validation und Pfadfilter prüfen
 
 1. Öffnet **Repos → Branches → main → … → Branch policies → Build Validation**.
 2. Erstellt oder prüft den Eintrag **orderflow-ci**, **Automatic**, **Required**, leerer Path filter. Kein doppelter Eintrag für dieselbe Pipeline.
-3. Erstellt nach dem erfolgreichen Reparaturlauf einen PR vom Feature-Branch nach `main`. Die Branch Policy muss einen Validierungsbuild starten. Belegt den verlinkten Build im PR.
-4. **Trainingsausnahme aus Lab03:** Prüfe den eigenen korrigierten PR und genehmige ihn mit **Approve**. Die gespeicherten Werte sind: Mindestanzahl **1**, **Allow requestors to approve their own changes: Ein**, **Prohibit the most recent pusher from approving their own changes: Aus**. Build Validation, Kommentarauflösung und Zurücksetzen der Zustimmungen bei neuen Änderungen bleiben bestehen; führt den PR erst nach grünen Pflichtprüfungen zusammen. Die Ausnahme gilt für alle PRs nach `main` im eigenen Trainingsprojekt. **Im Echtbetrieb prüft und genehmigt eine andere berechtigte Person die Änderung nach dem Vier-Augen-Prinzip:** Selbstfreigabe aus, Ausschluss der zuletzt pushenden Person ein.
-5. Für den CI-Pfadfilter erstellt einen separaten Branch `feature/lab05-docs-<kuerzel>` aus dem nun aktualisierten `main`. Ändert nur `README.md`, committet und erstellt zunächst keinen PR. Erwartet keinen **CI**-Run für diesen Commit. Belegt Commit und Run-Liste nach Aktualisierung; andere Run-Gründe separat prüfen.
-6. Verwendet für den positiven Pfadfiltertest die bereits vorhandenen Versionsänderungen aus Abschnitt 5 auf `feature/lab05-<kuerzel>`. Belegt im Commit-Diff, dass jeweils nur `src/version.txt` geändert wurde, und ordnet den automatisch gestarteten CI-Run dem Commit zu. Der fehlerhafte und der reparierte Run zeigen beide den Trigger; der Reparaturlauf belegt zusätzlich den erfolgreichen Abschluss. Ein zusätzlicher Quelltext-Commit ist nicht nötig. Der reine Dokumentationstest darf nicht mit einer ausgelösten PR-Policy verwechselt werden.
+3. Erstellt nach dem erfolgreichen Reparaturlauf einen PR vom Feature-Branch nach `main`. Die Branch Policy muss einen Validierungsbuild starten. Öffnet den verlinkten Build im PR und prüft dessen Ergebnis.
+4. Prüfe und genehmige den korrigierten PR nach den Trainingsregeln aus Lab03. Merge erst nach erfolgreichen Pflichtprüfungen.
 
-**Run-Abfolge ohne Bonus oder Reparatur eines unerwarteten Fehlers:** ein gemeinsamer Aufbau-Run, ein absichtlicher Fehler-Run, ein Reparatur-Run und ein PR-Validierungsbuild. Nach dem Merge startet außerdem der konfigurierte main-CI-Run; lasst ihn regulär abschließen. Der README-Test erzeugt keinen CI-Run. Startet keine zusätzlichen manuellen Kontrollläufe für bereits vorhandene Nachweise.
+5. Für den CI-Pfadfilter erstellt einen separaten Branch `feature/lab05-docs-<kuerzel>` aus dem nun aktualisierten `main`. Ändert nur `README.md`, committet und erstellt zunächst keinen PR. Erwartet keinen **CI**-Run für diesen Commit. Prüft Commit und Run-Liste nach Aktualisierung; andere Run-Gründe separat prüfen.
+6. Verwendet für den positiven Pfadfiltertest die bereits vorhandenen Versionsänderungen aus Abschnitt 5 auf `feature/lab05-<kuerzel>`. Prüft im Commit-Diff, dass jeweils nur `src/version.txt` geändert wurde, und ordnet den automatisch gestarteten CI-Run dem Commit zu. Der fehlerhafte und der reparierte Run zeigen beide den Trigger; der Reparaturlauf zeigt zusätzlich den erfolgreichen Abschluss. Ein zusätzlicher Quelltext-Commit ist nicht nötig. Der reine Dokumentationstest darf nicht mit einer ausgelösten PR-Policy verwechselt werden.
+
+**Run-Abfolge ohne Bonus oder Reparatur eines unerwarteten Fehlers:** ein gemeinsamer Aufbau-Run, ein absichtlicher Fehler-Run, ein Reparatur-Run und ein PR-Validierungsbuild. Nach dem Merge startet außerdem der konfigurierte main-CI-Run; lasst ihn regulär abschließen. Der README-Test erzeugt keinen CI-Run. Startet keine zusätzlichen manuellen Kontrollläufe für bereits geprüfte Ergebnisse.
 
 Azure Repos Git startet PR-Validierung durch die Branch Policy. Ergänzt dafür keinen YAML-`pr:`-Trigger.
 
-## 7. Abnahme
+## 7. Ergebnis prüfen
 
-Ablage: `lab05-durchfuehrung`. Sichere YAML-/Triggerstand, Variablenausgabe, Fehler- und Reparaturlog, Artefaktdateiliste mit Metadaten, PR-Validierung, Merge und beide Pfadfiltertests. Alle Nachweise stammen aus deinem Teilnehmerprojekt und nennen deinen jeweiligen Commit bzw. Run.
+Gehe die vorhandenen Runs und den PR direkt im Portal durch:
 
-| Test | Erwartung | Tatsächliches Ergebnis | Commit/Run/Beleg |
-|---|---|---|---|
-| Gültige Quelle | Test, Build und Artefakt erfolgreich | | |
-| Ungültige Version | Test schlägt fehl, kein neues veröffentlichtes Paket | | |
-| Korrigierte Version | Neuer Run grün | | |
-| Änderung nur an src/version.txt aus Abschnitt 5 | CI startet; vorhandenen Fehler-/Reparatur-Run verwenden | | |
-| Nur README, kein PR | Kein CI-Start durch diesen Trigger | | |
-| PR nach main | Branch Policy startet Validierung | | |
+- [ ] Die gültige Quelle führt zu erfolgreichen Tests und `orderflow-package` mit drei Dateien.
+- [ ] Die ungültige Version lässt den Test scheitern; es wird kein neues Paket veröffentlicht.
+- [ ] Nach Wiederherstellung der Version ist der Run wieder erfolgreich.
+- [ ] Die Änderungen an `src/version.txt` starten CI; die reine README-Änderung ohne PR startet keinen CI-Run.
+- [ ] Der PR löst den Pflichtbuild aus und wird erst nach erfolgreicher Prüfung abgeschlossen.
 
-- [ ] `orderflow-ci` verwendet die erweiterte aktive YAML-Datei.
-- [ ] `orderflow-package` enthält Version, Release Notes und Metadaten.
-- [ ] Fehlgeschlagener und korrigierter Run sind nachvollziehbar belegt.
-- [ ] PR-Validierung und CI-Pfadfilter wurden getrennt geprüft.
+Besprecht kurz den Unterschied zwischen CI-Pfadfilter und PR-Build-Validation.
 
 ## Bonus A – Schritte als Template
 
