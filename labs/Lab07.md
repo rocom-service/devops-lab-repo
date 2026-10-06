@@ -151,7 +151,7 @@ Der veröffentlichte Name ist `orderflow-package`; im Download steht fälschlich
 
 1. Starte den unveränderten Fehlerstand manuell aus **main** und prüfe die Stage-Status.
 2. Untersuche die Ursache und repariere sie auf `feature/lab07-e-<kuerzel>`. Prüfe dort das gewünschte Verhalten.
-3. Übernimm die Änderung per regulärem PR nach den Regeln aus Lab03 nach `main`. Warte auf alle Pflichtprüfungen.
+3. Prüfe den erfolgreichen manuellen Testlauf für den aktuellen Commit auf deinem Feature-Branch. Übernimm die Änderung anschließend per regulärem PR unter Beachtung der geltenden Reviewer- und Kommentarregeln nach `main`; verwende keinen Policy-Bypass.
 4. Starte die Testpipeline aus **main** und vergleiche mit dem Feature-Branch-Run.
 
 <details>

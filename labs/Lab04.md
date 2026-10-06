@@ -4,7 +4,7 @@
 
 **Dauer:** 30 Minuten · **Arbeitsform:** Einzelarbeit  
 **Organisation:** [ppedv-courses](https://dev.azure.com/ppedv-courses)  
-**Umgebung:** Persönliches Basic-Kurskonto mit Projektadministratorrechten im [zugeordneten Projekt](../KURSSTART.md#teilnehmerprojekte-und-kürzel); Lab01–03 sind abgeschlossen. `orderflow-app/main` enthält die Kursdateien, Reviewer- und Kommentar-Policies sind aktiv.
+**Umgebung:** Persönliches Basic-Kurskonto mit Projektadministratorrechten im [zugeordneten Projekt](../KURSSTART.md#teilnehmerprojekte-und-kürzel); Repository aus Lab01 und Rollengruppen aus Lab02 sind vorhanden. `orderflow-app/main` enthält die Kursdateien. Vorkenntnisse zu Pull Requests sind nicht erforderlich; bereits eingerichtete Reviewer- und Kommentarregeln werden beim Abschluss berücksichtigt.
 
 ## Ziel und Ablauf
 
@@ -14,7 +14,7 @@ Legt eine Pipeline aus einer vorhandenen YAML-Datei an, führt sie manuell aus u
 |---|---|---|
 | YAML und Pipeline anlegen | 10 Min | `orderflow-ci` verwendet die aktive Datei |
 | Run und Logs verstehen | 10 Min | Agent, Checkout und Ausgaben zugeordnet |
-| Rechte und Build Validation | 10 Min | Pipeline-Zugriff und Pflichtbuild eingerichtet |
+| Pipeline-Rechte und Auswertung | 10 Min | Pipeline-Zugriff geprüft und Run erklärt |
 
 ## 1. Startdatei als aktive Pipeline-Datei anlegen
 
@@ -46,8 +46,18 @@ Legt eine Pipeline aus einer vorhandenen YAML-Datei an, führt sie manuell aus u
    ```
 
 5. Committet mit `lab04: add initial pipeline` auf dem Feature-Branch. Bei einer bereits vorhandenen aktiven Datei prüft erst ihren Stand, statt sie ungeprüft zu überschreiben.
-6. Erstellt einen PR nach `main` und führt ihn nach den Trainingsregeln aus Lab03 mit **Approve** und erfüllten Pflichtprüfungen regulär zusammen. Eine bereits eingerichtete Build Validation bleibt aktiv.
-7. Kontrolliert danach die Datei unter **Repos → Files → main**. Die nächsten Labs erweitern genau diesen Pfad.
+6. **Den ersten Pull Request erstellen und abschließen.** Ein Pull Request (PR) schlägt vor, die Änderungen eures Feature-Branches nach `main` zu übernehmen. Beim Erstellen bleibt `main` unverändert; erst der Abschluss führt die Änderungen zusammen (Merge).
+
+   1. Öffnet **Repos → Pull requests**, wählt das Repository **orderflow-app** und klickt auf **New pull request**.
+   2. Wählt als **Source branch** (Quelle) `feature/lab04-<kuerzel>` und als **Target branch** (Ziel) `main`. Die Richtung lautet: **Feature-Branch → main**. Werden keine Änderungen angezeigt, prüft Branch-Auswahl und Commit aus Schritt 5.
+   3. Tragt als **Title** `Lab04: Erste YAML-Pipeline` und als **Description** `Fügt azure-pipelines.yml mit einem manuellen Start und einer Ausgabe der Build-Umgebung hinzu.` ein. Zusätzliche Reviewer oder verknüpfte Work Items müsst ihr für diesen Schritt nicht eintragen.
+   4. Klickt auf **Create**, um einen aktiven PR anzulegen. Verwendet keinen Entwurf (**Create as draft**) und kein **Auto-complete**.
+   5. Öffnet im PR die Registerkarte **Files** und wählt `azure-pipelines.yml`. Prüft den angezeigten Änderungsvergleich: Dateiname, Einrückung und Inhalt müssen zum Beispiel aus Schritt 4 passen. Falls eine Korrektur nötig ist, bearbeitet und committet die Datei auf demselben Feature-Branch. Der bestehende PR übernimmt die Änderung; legt keinen zweiten PR an.
+   6. Wechselt zu **Overview**. Falls eine Reviewer-Zustimmung verlangt wird, wählt **Approve**. Die eigene Zustimmung ist die Trainingsausnahme aus Lab03. Falls offene Kommentare vorhanden sind, klärt sie und setzt sie anschließend auf **Resolved**. Ohne entsprechende Regeln sind diese Aktionen für den Abschluss nicht erforderlich. Wenn eine verlangte Zustimmung nicht zählt oder eine andere Sperre angezeigt wird, bittet den Trainer um Unterstützung.
+   7. Klickt auf **Complete**. Prüft im Abschlussdialog erneut das Ziel `main`, behaltet den vorgeschlagenen Merge-Typ bei und lasst **Delete source branch** für diese Übung ausgeschaltet. Wählt **Complete merge**, um die Änderungen zu übernehmen. Aktiviert keine Option **Override branch policies**. Wird nur **Set auto-complete** angeboten oder ist der Abschluss gesperrt, prüft mit dem Trainer die noch offene Anforderung.
+   8. Prüft den Status **Completed** am PR. Erst jetzt sind die Änderungen nach `main` übernommen. **Approve** allein genehmigt eine Änderung, führt sie aber noch nicht zusammen.
+
+7. Öffnet **Repos → Files**, wählt **orderflow-app** und den Branch **main**. Öffnet `azure-pipelines.yml` im Repository-Wurzelverzeichnis und kontrolliert den übernommenen Inhalt. Die nächsten Labs erweitern genau diese Datei.
 
 ## 2. Pipeline aus Azure Repos Git erstellen
 
@@ -82,9 +92,9 @@ Legt eine Pipeline aus einer vorhandenen YAML-Datei an, führt sie manuell aus u
 | `PowerShell@2`, `pwsh: true` | Task mit PowerShell Core |
 | `$(greeting)` / `$(Build.BuildId)` | Makro-Variablen werden vor der Taskausführung eingesetzt |
 
-Ordnet die YAML-Elemente mündlich den passenden Steps, Einstellungen oder Ausgaben im Run zu. `trigger: none` verhindert keine manuelle Ausführung oder eine später eingerichtete Branch-Policy-Validierung.
+Ordnet die YAML-Elemente mündlich den passenden Steps, Einstellungen oder Ausgaben im Run zu. Mit `trigger: none` startet ihr die Pipeline manuell.
 
-## 5. Pipeline-Rechte und Build Validation einrichten
+## 5. Pipeline-Rechte einrichten
 
 1. Öffne **Pipelines → orderflow-ci → … → Manage security**. Setze die Gruppenrechte aus dieser Tabelle; **A = Allow, N = Not set**. Prüfe zusätzlich die Vererbung.
 
@@ -95,10 +105,9 @@ Ordnet die YAML-Elemente mündlich den passenden Steps, Einstellungen oder Ausga
    | Edit build pipeline | N | N | N | N |
    | Administer build permissions | N | N | N | N |
 
-2. Öffne **Repos → Branches → main → … → Branch policies → Build Validation → +**.
-3. Wähle **orderflow-ci**, **Automatic**, **Required**, keinen Path filter und **Build expiration: Immediately when main is updated**. Speichere und prüfe den Eintrag; lege keinen doppelten Eintrag an.
+2. Öffne die Berechtigungsansicht erneut und prüfe die gespeicherten Gruppenrechte einschließlich Vererbung.
 
-Dieser Build prüft zunächst nur den technischen Start. Die fachliche Quellprüfung und Paketierung ergänzt du in Lab05.
+Der manuelle Run prüft zunächst nur den technischen Start. Die fachliche Quellprüfung und Paketierung ergänzt du in Lab05.
 
 ## 6. Ergebnisprüfung
 
@@ -107,12 +116,14 @@ Prüfe direkt im Portal:
 - [ ] `orderflow-ci` verwendet `/azure-pipelines.yml` aus `orderflow-app`.
 - [ ] Der Run ist erfolgreich; Checkout und Task-Ausgaben sind sichtbar.
 - [ ] Agent, Checkout, Task und Build-ID lassen sich mündlich zuordnen.
-- [ ] Gruppenrechte und Required/Automatic Build Validation sind gespeichert.
+- [ ] Gruppenrechte sind gespeichert und einschließlich Vererbung geprüft.
 
 **Bonus:** Ergänzt ganz oben `name: $(Date:yyyyMMdd).$(Rev:r)` über einen Feature-Branch und PR. Startet einen neuen Run und prüft dessen lesbaren Namen.
 
 ## Portalhilfe
 
+- [Pull Request erstellen](https://learn.microsoft.com/en-us/azure/devops/repos/git/pull-requests?view=azure-devops)
+- [Pull Request abschließen](https://learn.microsoft.com/en-us/azure/devops/repos/git/complete-pull-requests?view=azure-devops)
 - [Erste Pipeline erstellen](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops)
 - [Azure Repos Git und Trigger](https://learn.microsoft.com/en-us/azure/devops/pipelines/repos/azure-repos-git?view=azure-devops)
 - [Microsoft-hosted Agents](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops)

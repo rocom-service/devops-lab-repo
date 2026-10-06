@@ -4,7 +4,7 @@
 
 **Dauer:** 70 Minuten · **Arbeitsform:** Einzelarbeit mit kurzen Prüfschritten  
 **Organisation:** [ppedv-courses](https://dev.azure.com/ppedv-courses)  
-**Umgebung:** Persönliches Kurskonto im zugeordneten Projekt; Lab04 ist abgeschlossen. `orderflow-ci` verwendet `/azure-pipelines.yml`, der Startlauf ist erfolgreich und Build Validation ist Required/Automatic. Ein gemeinsamer Microsoft-hosted Paralleljob: wartende Runs weiterverwenden.
+**Umgebung:** Persönliches Kurskonto im zugeordneten Projekt; Lab04 ist abgeschlossen. `orderflow-ci` verwendet `/azure-pipelines.yml` und der Startlauf ist erfolgreich. Ein gemeinsamer Microsoft-hosted Paralleljob: wartende Runs weiterverwenden.
 
 ## Ziel und Ablauf
 
@@ -14,7 +14,7 @@ Erweitert den Startstand zu einer Pipeline mit CI-Trigger, Konfigurationsvariabl
 |---|---|---|
 | Trigger, Variable, Test und Paketierung aufbauen | 25 Min | Vollständige YAML mit Stage und Job, ein gemeinsamer Commit |
 | Ersten CI-Run und Artefakt prüfen | 20 Min | Konfiguration, Quellprüfung und Paketinhalt geprüft |
-| Negativtest und PR-Validierung | 25 Min | Fehler erkannt, korrigierter Stand grün |
+| Negativtest, Merge und CI-Pfadfilter | 25 Min | Fehler behoben, geprüfter Stand übernommen und Pfadfilter geprüft |
 
 ## 1. Feature-Branch und aktive Datei prüfen
 
@@ -165,19 +165,16 @@ stages:
 2. Öffnet den automatisch gestarteten Run: **Validate source** muss am Versionsformat scheitern; es darf kein Paket veröffentlicht werden. Lest die Fehlermeldung und prüft den zugehörigen Commit.
 3. Stellt die vorherige gültige Version wieder her und committet erneut. Prüft, dass Test, Paketierung und Veröffentlichung wieder erfolgreich sind. Erst den korrigierten Stand nach `main` übernehmen.
 
-## 6. PR-Build-Validation und Pfadfilter prüfen
+## 6. Geprüften Stand übernehmen und CI-Pfadfilter prüfen
 
-1. Öffnet **Repos → Branches → main → … → Branch policies → Build Validation**.
-2. Erstellt oder prüft den Eintrag **orderflow-ci**, **Automatic**, **Required**, leerer Path filter. Kein doppelter Eintrag für dieselbe Pipeline.
-3. Erstellt nach dem erfolgreichen Reparaturlauf einen PR vom Feature-Branch nach `main`. Die Branch Policy muss einen Validierungsbuild starten. Öffnet den verlinkten Build im PR und prüft dessen Ergebnis.
-4. Prüfe und genehmige den korrigierten PR nach den Trainingsregeln aus Lab03. Merge erst nach erfolgreichen Pflichtprüfungen.
+1. Prüft den erfolgreichen Reparaturlauf aus Abschnitt 5 und vergleicht dessen Commit mit dem aktuellen Stand von `feature/lab05-<kuerzel>`. Test, Paketierung und Veröffentlichung müssen für diesen Stand erfolgreich sein.
+2. Erstellt einen PR vom Feature-Branch nach `main`. Prüft die Änderungen und führt ihn unter Beachtung der geltenden Reviewer- und Kommentarregeln regulär zusammen. Kontrolliert vor dem Merge selbst den erfolgreichen CI-Lauf für den aktuellen Commit; verwendet keinen Policy-Bypass.
+3. Öffnet den nach dem Merge automatisch gestarteten CI-Run auf `main` und prüft dessen erfolgreichen Abschluss.
 
-5. Für den CI-Pfadfilter erstellt einen separaten Branch `feature/lab05-docs-<kuerzel>` aus dem nun aktualisierten `main`. Ändert nur `README.md`, committet und erstellt zunächst keinen PR. Erwartet keinen **CI**-Run für diesen Commit. Prüft Commit und Run-Liste nach Aktualisierung; andere Run-Gründe separat prüfen.
-6. Verwendet für den positiven Pfadfiltertest die bereits vorhandenen Versionsänderungen aus Abschnitt 5 auf `feature/lab05-<kuerzel>`. Prüft im Commit-Diff, dass jeweils nur `src/version.txt` geändert wurde, und ordnet den automatisch gestarteten CI-Run dem Commit zu. Der fehlerhafte und der reparierte Run zeigen beide den Trigger; der Reparaturlauf zeigt zusätzlich den erfolgreichen Abschluss. Ein zusätzlicher Quelltext-Commit ist nicht nötig. Der reine Dokumentationstest darf nicht mit einer ausgelösten PR-Policy verwechselt werden.
+4. Für den CI-Pfadfilter erstellt einen separaten Branch `feature/lab05-docs-<kuerzel>` aus dem nun aktualisierten `main`. Ändert nur `README.md`, committet und erstellt keinen PR. Erwartet keinen **CI**-Run für diesen Commit. Prüft Commit und Run-Liste nach Aktualisierung; andere Run-Gründe separat prüfen.
+5. Verwendet für den positiven Pfadfiltertest die bereits vorhandenen Versionsänderungen aus Abschnitt 5 auf `feature/lab05-<kuerzel>`. Prüft im Commit-Diff, dass jeweils nur `src/version.txt` geändert wurde, und ordnet den automatisch gestarteten CI-Run dem Commit zu. Der fehlerhafte und der reparierte Run zeigen beide den Trigger; der Reparaturlauf zeigt zusätzlich den erfolgreichen Abschluss. Ein zusätzlicher Quelltext-Commit ist nicht nötig.
 
-**Run-Abfolge ohne Bonus oder Reparatur eines unerwarteten Fehlers:** ein gemeinsamer Aufbau-Run, ein absichtlicher Fehler-Run, ein Reparatur-Run und ein PR-Validierungsbuild. Nach dem Merge startet außerdem der konfigurierte main-CI-Run; lasst ihn regulär abschließen. Der README-Test erzeugt keinen CI-Run. Startet keine zusätzlichen manuellen Kontrollläufe für bereits geprüfte Ergebnisse.
-
-Azure Repos Git startet PR-Validierung durch die Branch Policy. Ergänzt dafür keinen YAML-`pr:`-Trigger.
+**Run-Abfolge ohne Bonus oder Reparatur eines unerwarteten Fehlers:** vier CI-Runs – ein gemeinsamer Aufbau-Run, ein absichtlicher Fehler-Run, ein Reparatur-Run und der main-CI-Run nach dem Merge. Der README-Test erzeugt keinen CI-Run. Startet keine zusätzlichen manuellen Kontrollläufe für bereits geprüfte Ergebnisse.
 
 ## 7. Ergebnis prüfen
 
@@ -187,9 +184,9 @@ Gehe die vorhandenen Runs und den PR direkt im Portal durch:
 - [ ] Die ungültige Version lässt den Test scheitern; es wird kein neues Paket veröffentlicht.
 - [ ] Nach Wiederherstellung der Version ist der Run wieder erfolgreich.
 - [ ] Die Änderungen an `src/version.txt` starten CI; die reine README-Änderung ohne PR startet keinen CI-Run.
-- [ ] Der PR löst den Pflichtbuild aus und wird erst nach erfolgreicher Prüfung abgeschlossen.
+- [ ] Vor dem Merge wurde der erfolgreiche CI-Lauf für den aktuellen Feature-Branch-Commit geprüft; der anschließende main-CI-Run ist erfolgreich.
 
-Besprecht kurz den Unterschied zwischen CI-Pfadfilter und PR-Build-Validation.
+Besprecht kurz: Warum startet eine Versionsänderung einen CI-Run, eine reine README-Änderung dagegen nicht?
 
 ## Bonus A – Schritte als Template
 
@@ -209,6 +206,6 @@ Besprecht kurz den Unterschied zwischen CI-Pfadfilter und PR-Build-Validation.
 
 ## Portalhilfe
 
-- [Branch Policies und Build Validation](https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops)
+- [Azure Repos Git und CI-Trigger](https://learn.microsoft.com/en-us/azure/devops/pipelines/repos/azure-repos-git?view=azure-devops)
 - [Pipelinebedingungen](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/conditions?view=azure-devops)
 - [Pipeline-Artefakte](https://learn.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops)

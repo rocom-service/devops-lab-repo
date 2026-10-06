@@ -17,7 +17,7 @@ Baut ein Paket einmal und verwendet es im selben Run für Staging und Produktion
 | Approval und Autorisierungs-Negativtest | 10 Min | Eigener Approver konfiguriert, Wirkung fehlender Staging-Autorisierung beobachtet |
 | Wiederherstellung, Approval und Auswertung | 15 Min | Staging erfolgreich, Produktion wartet und wird genehmigt; Artefaktidentität und History geprüft |
 
-Die Build-/PR-Pipeline `orderflow-ci` bleibt für Branch Validation erhalten. Für dieses Lab legt ihr `orderflow-release` mit der bereits importierten Datei `azure-pipelines.multistage.yml` an. So wartet ein PR-Build nicht auf die Produktionsfreigabe. Bleibt im eigenen Trainingsprojekt in **ppedv-courses**.
+Die CI-Pipeline `orderflow-ci` bleibt für Tests und Paketierung bei Quelländerungen erhalten. Für dieses Lab legt ihr die separat manuell gestartete Pipeline `orderflow-release` mit der bereits importierten Datei `azure-pipelines.multistage.yml` an. Sie führt Build und simulierte Deployments aus. Bleibt im eigenen Trainingsprojekt in **ppedv-courses**.
 
 Die Übung verwendet **zwei erfolgreiche vollständige Runs und einen Autorisierungs-Negativversuch**. Der zweite erfolgreiche Run prüft gleichzeitig Wiederherstellung und Approval. In Lab07 besprecht ihr den Unterschied zwischen diesen beiden Mechanismen.
 
@@ -106,7 +106,6 @@ stages:
 2. Wählt **Branch: main**, **Path: /azure-pipelines.multistage.yml**, dann **Continue**.
 3. Wählt möglichst **Save** im Run-Dropdown. Benennt die Pipeline anschließend unter **… → Rename/move** in `orderflow-release` um. Falls der Assistent bereits einen Run startet, zählt dieser erst nach vollständig geprüften Ressourcen als Vergleichslauf.
 4. Kontrolliere unter **… → Settings** den Pfad `/azure-pipelines.multistage.yml` und den Default Branch `refs/heads/main`. Öffne **… → Manage security**: Setze für **OrderFlow Release Managers** `View builds`, `View build pipeline` und `Queue builds` auf Allow. `Edit build pipeline` und `Administer build permissions` bleiben für diese Fachgruppe Not set.
-5. Lasst die Build-Validation-Policy auf `main` weiterhin auf **orderflow-ci** zeigen. Wählt dort nicht die Release-Pipeline aus.
 
 ## 3. Environments und Pipeline permissions prüfen
 
@@ -163,7 +162,7 @@ Die Approval-Liste wird beim Start der Checks bestimmt. Korrigiere eine falsch e
 - [ ] Nach Entfernen der Staging-Autorisierung fordert der Run Zugriff an oder scheitert an dieser Grenze.
 - [ ] Die gezielte Autorisierung ist wiederhergestellt; Open access bleibt aus.
 - [ ] Im zweiten erfolgreichen Run wartet Produktion auf Approval und läuft nach deiner Zustimmung weiter.
-- [ ] Branch Validation verwendet weiterhin `orderflow-ci`.
+- [ ] `orderflow-release` verwendet `/azure-pipelines.multistage.yml`; `orderflow-ci` behält `/azure-pipelines.yml`.
 
 ## Bonus: Branch Control
 

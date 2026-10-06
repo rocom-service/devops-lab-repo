@@ -15,7 +15,7 @@ Schützt `main` durch PR-Regeln, prüft deren Wirkung und bereitet zwei Training
 | Ressourcenrollen und Autorisierung | 20 Min | Geschützte Trainings-Environments |
 | PR-Tests und Auswertung | 15 Min | Wirkung der Reviewer- und Kommentarregeln |
 
-`orderflow-ci` entsteht in Lab04. Dort richtest du Build Validation ein; die Pipeline-Autorisierung der Environments prüfst du in Lab06.
+`orderflow-ci` entsteht in Lab04. Die Pipeline-Autorisierung der Environments prüfst du in Lab06.
 
 ## 1. `main` durch Branch Policies schützen
 
@@ -39,11 +39,11 @@ Schützt `main` durch PR-Regeln, prüft deren Wirkung und bereitet zwei Training
 
 ## 2. Hinweis zur Build Validation
 
-Beim Erstablauf bleibt **Build Validation** leer. In Lab04 ergänzt du die neu erstellte `orderflow-ci` als Pflichtprüfung. Eine bereits eingerichtete Build Validation bleibt bei einer Wiederholung aktiv.
+**Build Validation** wird ausschließlich theoretisch besprochen und in den Labs nicht eingerichtet. Der Trainer klärt vor einer Wiederholung vorhandene Einstellungen im Trainingsprojekt.
 
 ## 3. Hinweis zu den Pipelines
 
-`orderflow-ci` übernimmt Build und PR-Prüfung ab Lab04. `orderflow-release` führt die simulierten Deployments ab Lab06 aus. Die jeweiligen Rechte richtest du bei der Erstellung dieser Pipelines ein.
+`orderflow-ci` führt ab Lab04 Builds aus und wird in Lab05 um CI-Trigger, Quellprüfung und Paketierung erweitert. `orderflow-release` führt die simulierten Deployments ab Lab06 aus. Die jeweiligen Rechte richtest du bei der Erstellung dieser Pipelines ein.
 
 ## 4. Zwei leere Trainings-Environments anlegen
 
@@ -71,9 +71,9 @@ Prüfe die Policy-Auswertung direkt an deinem PR. Verwende dabei keinen administ
 3. **Test A – Zustimmung fehlt:** Öffnet im PR die Registerkarte **Overview** und dort die angezeigten Pflichtprüfungen. Die Mindestanzahl von einem Reviewer ist noch nicht erfüllt. Prüft den angezeigten Status. Falls euer Administratorkonto eine Option zum Übersteuern anbietet, verwendet sie nicht. Entscheidend ist der Policy-Status, nicht allein die Verfügbarkeit der Schaltfläche **Complete**.
 4. **Test B – Offener Kommentar:** Fügt selbst einen Kommentar hinzu, zum Beispiel `Bitte die Release-Notiz vor Abschluss prüfen`, und lasst ihn im Status **Active**. Genehmigt anschließend euren eigenen PR über **Approve**. Die Reviewer-Policy ist nun erfüllt, die verpflichtende Kommentarauflösung weiterhin nicht. Vergleicht die beiden Statuswerte. Bei abweichendem Ergebnis prüft die gespeicherten Policies aus Abschnitt 1.
 5. **Optional – Neue Änderung setzt Zustimmung zurück:** Ergänzt die Release-Notiz auf demselben Feature-Branch und committet erneut. Ladet den PR neu: Die Zustimmung muss zurückgesetzt sein. Prüft die Rücksetzung und stimmt anschließend erneut über **Approve** zu. Lasst den Kommentar für diesen Test noch offen.
-6. **Test C – Regulärer Abschluss:** Prüft die Änderung und setzt euren Kommentar auf **Resolved**. Reviewer- und Kommentar-Policy müssen jetzt erfüllt sein. Falls Build Validation bereits eingerichtet ist, wartet zusätzlich auf den erfolgreichen Pflichtbuild; bei Fehlern korrigiert die Ursache, statt die Policy abzuschalten. Schließt den PR erst bei erfüllten Pflichtprüfungen über **Complete** regulär ab, ohne **Override branch policies** oder eine andere Bypass-Option. Prüft danach die Änderung auf `main` und den Status **Completed** am PR.
+6. **Test C – Regulärer Abschluss:** Prüft die Änderung und setzt euren Kommentar auf **Resolved**. Reviewer- und Kommentar-Policy müssen jetzt erfüllt sein. Schließt den PR über **Complete** regulär ab, ohne **Override branch policies** oder eine andere Bypass-Option. Prüft danach die Änderung auf `main` und den Status **Completed** am PR.
 
-Im Erstablauf prüft dieser PR nur Reviewer und Kommentare. Den Build-Validation-Schritt erledigst du am Ende von Lab04. Bei einer späteren Wiederholung bleibt eine bereits aktive Build Validation verpflichtend.
+Dieser PR prüft die Reviewer- und Kommentarregeln. In den folgenden Labs kontrolliert ihr die erfolgreichen Pipeline-Läufe direkt im Portal.
 
 ## 7. Ergebnis prüfen
 
